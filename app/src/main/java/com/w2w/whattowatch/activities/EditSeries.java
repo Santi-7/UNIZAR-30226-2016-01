@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.w2w.whattowatch.R;
 
-public class EditSeries extends AppCompatActivity {
+public class EditSeries extends AppCompatActivity implements EditInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +50,21 @@ public class EditSeries extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Saves all user inputs to the database as a series
+     */
+    public void saveState(){
+
+    }
+
+    /**
+     * Fills all user input fields with previously existing information from the database.
+     * @param elementId id of the series which information will be retrieved to the input
+     *      fields from the database.
+     */
+    public void populateFields(long elementId){
+
     }
 }

@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.w2w.whattowatch.R;
 
-public class EditEpisodes extends AppCompatActivity {
+public class EditEpisodes extends AppCompatActivity implements EditInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,4 +51,21 @@ public class EditEpisodes extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * Saves all user inputs to the database as an episode
+     */
+    public void saveState(){
+
+    }
+
+    /**
+     * Fills all user input fields with previously existing information from the database.
+     * @param elementId id of the episode which information will be retrieved to the input
+     *      fields from the database.
+     */
+    public void populateFields(long elementId){
+
+    }
+
 }
