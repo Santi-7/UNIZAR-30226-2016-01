@@ -1,15 +1,17 @@
-package com.w2w.whattowatch;
+package com.w2w.whattowatch.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class ListSeries extends AppCompatActivity {
+import com.w2w.whattowatch.R;
+
+public class ListEpisodes extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
