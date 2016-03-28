@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.w2w.whattowatch.R;
 
-public class ListEpisodes extends AppCompatActivity {
+public class ListEpisodes extends AppCompatActivity implements ListInterface{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +50,35 @@ public class ListEpisodes extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Fetches and shows all episodes from the database.
+     */
+    public void list(){
+
+    }
+
+    /**
+     * Starts an activity to create a new episode
+     */
+    public void create(){
+
+    }
+
+    /**
+     * Starts an activity to edit an episode
+     * @param elementId id of the episode that will be edited
+     */
+    public void edit(long elementId){
+
+    }
+
+    /**
+     * Deletes the episode elementId
+     * @param elementId id of the episode that will be deleted
+     */
+    public void delete(long elementId){
+
     }
 }

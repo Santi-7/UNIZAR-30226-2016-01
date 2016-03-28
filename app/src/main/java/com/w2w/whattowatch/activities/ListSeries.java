@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import com.w2w.whattowatch.R;
 
-public class ListSeries extends AppCompatActivity {
+public class ListSeries extends AppCompatActivity implements ListInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,4 +51,35 @@ public class ListSeries extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * Fetches and shows all series from the database.
+     */
+    public void list(){
+
+    }
+
+    /**
+     * Starts an activity to create a new series
+     */
+    public void create(){
+
+    }
+
+    /**
+     * Starts an activity to edit a series
+     * @param elementId id of the series that will be edited
+     */
+    public void edit(long elementId){
+
+    }
+
+    /**
+     * Deletes the series elementId
+     * @param elementId id of the series that will be deleted
+     */
+    public void delete(long elementId){
+
+    }
+
 }
