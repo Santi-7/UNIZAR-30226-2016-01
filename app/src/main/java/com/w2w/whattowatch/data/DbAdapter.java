@@ -38,7 +38,7 @@ public class DbAdapter {
             "create table " + DATABASE_SERIES_TABLE +
             " (" + SERIES_KEY_ID + " integer primary key autoincrement, " +
                    SERIES_KEY_TITLE + " text not null, " +
-                    SERIES_KEY_SCORE + " integer, " +
+                   SERIES_KEY_SCORE + " integer, " +
                    SERIES_KEY_DESCRIPTION + " text not null);";
 
     /* SQL statement for creating the episode table*/
@@ -49,7 +49,7 @@ public class DbAdapter {
                    EPISODE_KEY_SEASON_NUM + " integer, " +
                    EPISODE_KEY_EPISODE_NUM + " integer, " +
                    EPISODE_KEY_SERIES + " integer, " +
-                    EPISODE_KEY_WATCHED + " boolean, " +
+                   EPISODE_KEY_WATCHED + " boolean, " +
                    "foreign key (" + EPISODE_KEY_SERIES + ") references " +
                    DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
 
@@ -193,7 +193,6 @@ public class DbAdapter {
     }
 
     /**
-     *
      * @param name of the updated episode.
      *             name != null
      * @param season of the updated episode.
