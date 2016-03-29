@@ -18,11 +18,13 @@ public class DbAdapter {
     public static final String SERIES_KEY_ID = "s_id"; // A series' unique id field
     public static final String SERIES_KEY_TITLE = "title"; // Series title field
     public static final String SERIES_KEY_DESCRIPTION = "description"; // Series description field
+    public static final String SERIES_KEY_SCORE = "score"; // Series description field
 
     public static final String EPISODE_KEY_ID = "e_id"; // An episode's unique id field
     public static final String EPISODE_KEY_NAME = "name"; // Episode name field
     public static final String EPISODE_KEY_SEASON_NUM = "season"; // Season field
     public static final String EPISODE_KEY_EPISODE_NUM = "number"; // Episode number field
+    public static final String EPISODE_KEY_WATCHED = "watched"; // Episode series field
     public static final String EPISODE_KEY_SERIES = "series"; // Episode series field
 
     private static final String DATABASE_NAME = "seriesDB"; // Database name
@@ -36,6 +38,7 @@ public class DbAdapter {
             "create table " + DATABASE_SERIES_TABLE +
             " (" + SERIES_KEY_ID + " integer primary key autoincrement, " +
                    SERIES_KEY_TITLE + " text not null, " +
+                    SERIES_KEY_SCORE + " integer, " +
                    SERIES_KEY_DESCRIPTION + " text not null);";
 
     /* SQL statement for creating the episode table*/
@@ -46,6 +49,7 @@ public class DbAdapter {
                    EPISODE_KEY_SEASON_NUM + " integer, " +
                    EPISODE_KEY_EPISODE_NUM + " integer, " +
                    EPISODE_KEY_SERIES + " integer, " +
+                    EPISODE_KEY_WATCHED + " tinyInt, " +
                    "foreign key (" + EPISODE_KEY_SERIES + ") references " +
                    DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
 
