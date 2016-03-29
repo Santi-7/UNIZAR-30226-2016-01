@@ -3,6 +3,7 @@ package com.w2w.whattowatch.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -24,10 +25,18 @@ public class DbAdapter {
     public static final String EPISODE_KEY_EPISODE_NUM = "number"; // Episode number field
     public static final String EPISODE_KEY_SERIES = "series"; // Episode series field
 
-    private static final String DATABASE_NAME = "data";
-    private static final String DATABASE_SERIES_TABLE = "series"; // Table of series
-    private static final String DATABASE_EPISODES_TABLE = "episodes"; // Table of episodes
-    private static final int DATABASE_VERSION = 2;
+    /* Database creation sql statement */
+    private static final String DATABASE_NAME = "seriesDB"; // Database name
+    private static final String DATABASE_SERIES_TABLE = "series"; // Name of the series table
+    private static final String DATABASE_EPISODES_TABLE = "episodes"; // Name of the episode table
+    // TODO: Write the sql statements
+    private static final String CREATE_SERIES_TABLE = ""; /* SQL statement for creating the
+        series table*/
+    private static final String CREATE_EPISODE_TABLE = ""; /* SQL statement for creating the
+        episode table*/
+
+    private static final int DATABASE_VERSION = 1; /* Database version, if greater than the
+        oldest the database will be updated */
 
     /* Adapter private variables */
     private Context ctx;
@@ -113,10 +122,17 @@ public class DbAdapter {
      * Retrieves the series [seriesId] from the database.
      * @param seriesId id of the series to be retrieved.
      * @return Cursor positioned at the series with id [seriesId]
+     * @throws SQLException if note could not be found/retrieved
      */
-    public Cursor fetchSeries(long seriesId) {
-        //TODO: implement fetchSeries()
-        return null;
+    public Cursor fetchSeries(long seriesId) throws SQLException {
+        Cursor mCursor =
+                sDb.query(true, DATABASE_SERIES_TABLE, new String[]
+                                {SERIES_KEY_ID, SERIES_KEY_TITLE, SERIES_KEY_DESCRIPTION},
+                          SERIES_KEY_ID + "=" + seriesId, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
     }
 
     /**
@@ -127,6 +143,10 @@ public class DbAdapter {
         // TODO: implement fetchAllSeries()
         return null;
     }
+
+    //////////////////////////////////////////////////////////////
+    //////////////////METHODS FOR MANAGING EPISODES///////////////
+    //////////////////////////////////////////////////////////////
 
     /**
      * Creates a new episodes in the database.
@@ -140,10 +160,6 @@ public class DbAdapter {
         // TODO: implement createEpisode()
         return 0;
     }
-
-    //////////////////////////////////////////////////////////////
-    //////////////////METHODS FOR MANAGING EPISODES///////////////
-    //////////////////////////////////////////////////////////////
 
     /**
      *
@@ -190,21 +206,10 @@ public class DbAdapter {
     }
 
     /**
-     * Class to manage the notes database creating or updating when needed.
+     * Class to manage the series database creating or updating when needed.
      */
     private static class SeriesDatabaseHelper extends SQLiteOpenHelper {
 
-        private static final String DATABASE_NAME = "seriesDB"; // Database name
-        private static final String SERIES_TABLE_NAME = "series"; // Name of the series table
-        private static final String EPISODE_TABLE_NAME = "episode"; // Name of the episode table
-        // TODO: Write the sql statements
-        private static final String CREATE_SERIES_TABLE = ""; /* SQL statement for creating the
-        series table*/
-        private static final String CREATE_EPISODE_TABLE = ""; /* SQL statement for creating the
-        episode table*/
-
-        private static final int DATABASE_VERSION = 1; /* Database version, if greater than the
-        oldest the database will be updated*/
         /**
          * Constructor - Retrieves, creates or updates the database that holds all the information
          * for all series.
@@ -231,8 +236,8 @@ public class DbAdapter {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(this.getClass().toString(), "Upgrading database from version " + oldVersion +
                     " to " + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS " + SERIES_TABLE_NAME );
-            db.execSQL("DROP TABLE IF EXISTS " + EPISODE_TABLE_NAME );
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_SERIES_TABLE );
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_EPISODES_TABLE );
             onCreate(db);
         }
     }
