@@ -68,6 +68,7 @@ public class DbAdapter {
     /**
      * Creates a new series in the database.
      * @param title of the series to be created.
+     * @param description of the series to be created.
      * @return id of the newly created series in the database.
      * // TODO: Decide whether -1 or an exception will be return if it fails
      */
@@ -98,8 +99,10 @@ public class DbAdapter {
      * @return true if and only if the series could be deleted.
      */
     public boolean deleteSeries(long seriesId) {
-        // TODO: implement deleteSeries()
-        return false;
+        if (seriesId < 0) {
+            return false;
+        }
+        return sDb.delete(DATABASE_SERIES_TABLE, SERIES_KEY_ID + "=" + seriesId, null) > 0;
     }
 
     /**
