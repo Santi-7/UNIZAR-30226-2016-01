@@ -83,14 +83,20 @@ public class DbAdapter {
     }
 
     /**
-     * Updates the title of an existing series.
+     * Updates the title and description of an existing series.
      * @param title new title for the series.
+     * @param description of the series to be created.
      * @param seriesId of the series that will be updated.
      * @return true if and only if the series title could be updated.
      */
-    public boolean updateSeries(String title, long seriesId) {
-        // TODO: Implement updateSeries()
-        return false;
+    public boolean updateSeries(String title, String description, long seriesId) {
+        if (title == null || title.equals("") || description == null || seriesId <= 0) {
+            return false;
+        }
+        ContentValues args = new ContentValues();
+        args.put(SERIES_KEY_TITLE, title);
+        args.put(SERIES_KEY_DESCRIPTION, description);
+        return sDb.update(DATABASE_SERIES_TABLE, args, SERIES_KEY_ID + "=" + seriesId, null) > 0;
     }
 
     /**
@@ -99,10 +105,8 @@ public class DbAdapter {
      * @return true if and only if the series could be deleted.
      */
     public boolean deleteSeries(long seriesId) {
-        if (seriesId < 0) {
-            return false;
-        }
-        return sDb.delete(DATABASE_SERIES_TABLE, SERIES_KEY_ID + "=" + seriesId, null) > 0;
+        return seriesId > 0 &&
+                sDb.delete(DATABASE_SERIES_TABLE, SERIES_KEY_ID + "=" + seriesId, null) > 0;
     }
 
     /**
