@@ -167,14 +167,25 @@ public class DbAdapter {
     /**
      * Creates a new episodes in the database.
      * @param name of the new episode.
+     *             name != null
      * @param season of the new episode.
+     *             season > 0
      * @param number of the new episode.
+     *             number > 0
      * @param series the new episode belongs to.
-     * @return id of the new episode
+     *             series > 0
+     * @return id of the new episode or -1 to indicate error.
      */
     public long createEpisode(String name, int season, int number, long series) {
-        // TODO: implement createEpisode()
-        return 0;
+        if (name == null || season <= 0 || number <= 0 || series <= 0) {
+            return -1;
+        }
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(EPISODE_KEY_NAME, name);
+        initialValues.put(EPISODE_KEY_SEASON_NUM, season);
+        initialValues.put(EPISODE_KEY_EPISODE_NUM, number);
+        initialValues.put(EPISODE_KEY_SERIES, series);
+        return sDb.insert(DATABASE_EPISODES_TABLE, null, initialValues);
     }
 
     /**
