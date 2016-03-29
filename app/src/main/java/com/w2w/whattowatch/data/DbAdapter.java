@@ -75,7 +75,7 @@ public class DbAdapter {
     }
 
     /**
-     * Closes the database helper. // Bug:
+     * Closes the database helper.
      */
     public void close() {
         sDbHelper.close();
@@ -207,8 +207,15 @@ public class DbAdapter {
      * @return Cursor positioned at the episode with id [episodeId]
      */
     public Cursor fetchEpisode(long episodeId) {
-        //TODO: implement fetchEpisode()
-        return null;
+        Cursor mCursor =
+                sDb.query(true, DATABASE_EPISODES_TABLE, new String[]
+                                {EPISODE_KEY_ID, EPISODE_KEY_NAME, EPISODE_KEY_SEASON_NUM,
+                                        EPISODE_KEY_EPISODE_NUM, EPISODE_KEY_SERIES},
+                          EPISODE_KEY_ID + "=" + episodeId, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
     }
 
     /**
@@ -217,8 +224,10 @@ public class DbAdapter {
      * @return Cursor positioned at the head of all the episodes of the series in the database.
      */
     public Cursor fetchAllEpisodes(long series) {
-        //TODO: implement fetchEpisode()
-        return null;
+        String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
+                       " WHERE " + EPISODE_KEY_SERIES + " = " + series +
+                       " ORDER BY " + EPISODE_KEY_SEASON_NUM + ", " + EPISODE_KEY_EPISODE_NUM;
+        return sDb.rawQuery(query, null);
     }
 
     /**
