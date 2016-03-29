@@ -25,18 +25,29 @@ public class DbAdapter {
     public static final String EPISODE_KEY_EPISODE_NUM = "number"; // Episode number field
     public static final String EPISODE_KEY_SERIES = "series"; // Episode series field
 
-    /* Database creation sql statement */
     private static final String DATABASE_NAME = "seriesDB"; // Database name
     private static final String DATABASE_SERIES_TABLE = "series"; // Name of the series table
     private static final String DATABASE_EPISODES_TABLE = "episodes"; // Name of the episode table
-    // TODO: Write the sql statements
-    private static final String CREATE_SERIES_TABLE = ""; /* SQL statement for creating the
-        series table*/
-    private static final String CREATE_EPISODE_TABLE = ""; /* SQL statement for creating the
-        episode table*/
-
     private static final int DATABASE_VERSION = 1; /* Database version, if greater than the
         oldest the database will be updated */
+
+    /* SQL statement for creating the series table*/
+    private static final String CREATE_SERIES_TABLE =
+            "create table " + DATABASE_SERIES_TABLE +
+            " (" + SERIES_KEY_ID + " integer primary key autoincrement, " +
+                   SERIES_KEY_TITLE + " text not null, " +
+                   SERIES_KEY_DESCRIPTION + " text not null);";
+
+    /* SQL statement for creating the episode table*/
+    private static final String CREATE_EPISODE_TABLE =
+            "create table " + DATABASE_EPISODES_TABLE +
+            " (" + EPISODE_KEY_ID + " integer primary key autoincrement, " +
+                   EPISODE_KEY_NAME + " text not null, " +
+                   EPISODE_KEY_SEASON_NUM + " integer, " +
+                   EPISODE_KEY_EPISODE_NUM + " integer, " +
+                   EPISODE_KEY_SERIES + " integer, " +
+                   "foreign key (" + EPISODE_KEY_SERIES + ") references " +
+                   DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
 
     /* Adapter private variables */
     private Context ctx;
