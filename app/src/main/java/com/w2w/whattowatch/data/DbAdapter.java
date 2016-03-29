@@ -25,18 +25,29 @@ public class DbAdapter {
     public static final String EPISODE_KEY_EPISODE_NUM = "number"; // Episode number field
     public static final String EPISODE_KEY_SERIES = "series"; // Episode series field
 
-    /* Database creation sql statement */
     private static final String DATABASE_NAME = "seriesDB"; // Database name
     private static final String DATABASE_SERIES_TABLE = "series"; // Name of the series table
     private static final String DATABASE_EPISODES_TABLE = "episodes"; // Name of the episode table
-    // TODO: Write the sql statements
-    private static final String CREATE_SERIES_TABLE = ""; /* SQL statement for creating the
-        series table*/
-    private static final String CREATE_EPISODE_TABLE = ""; /* SQL statement for creating the
-        episode table*/
-
     private static final int DATABASE_VERSION = 1; /* Database version, if greater than the
         oldest the database will be updated */
+
+    /* SQL statement for creating the series table*/
+    private static final String CREATE_SERIES_TABLE =
+            "create table " + DATABASE_SERIES_TABLE +
+            " (" + SERIES_KEY_ID + " integer primary key autoincrement, " +
+                   SERIES_KEY_TITLE + " text not null, " +
+                   SERIES_KEY_DESCRIPTION + " text not null);";
+
+    /* SQL statement for creating the episode table*/
+    private static final String CREATE_EPISODE_TABLE =
+            "create table " + DATABASE_EPISODES_TABLE +
+            " (" + EPISODE_KEY_ID + " integer primary key autoincrement, " +
+                   EPISODE_KEY_NAME + " text not null, " +
+                   EPISODE_KEY_SEASON_NUM + " integer, " +
+                   EPISODE_KEY_EPISODE_NUM + " integer, " +
+                   EPISODE_KEY_SERIES + " integer, " +
+                   "foreign key (" + EPISODE_KEY_SERIES + ") references " +
+                   DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
 
     /* Adapter private variables */
     private Context ctx;
@@ -64,7 +75,7 @@ public class DbAdapter {
     }
 
     /**
-     * Closes the database helper. // Bug:
+     * Closes the database helper.
      */
     public void close() {
         sDbHelper.close();
@@ -183,11 +194,12 @@ public class DbAdapter {
     /**
      * Deletes the episode [episodeId] from the database.
      * @param episodeId id of the episode that will be deleted.
+     *                  episodeId > 0
      * @return true if and only if the episode could be deleted from the database.
      */
     public boolean deleteEpisode(long episodeId) {
-        //TODO: implement deleteEpisode()
-        return false;
+        return episodeId > 0 &&
+                sDb.delete(DATABASE_EPISODES_TABLE, EPISODE_KEY_ID + "=" + episodeId, null) > 0;
     }
 
     /**
@@ -196,8 +208,15 @@ public class DbAdapter {
      * @return Cursor positioned at the episode with id [episodeId]
      */
     public Cursor fetchEpisode(long episodeId) {
-        //TODO: implement fetchEpisode()
-        return null;
+        Cursor mCursor =
+                sDb.query(true, DATABASE_EPISODES_TABLE, new String[]
+                                {EPISODE_KEY_ID, EPISODE_KEY_NAME, EPISODE_KEY_SEASON_NUM,
+                                        EPISODE_KEY_EPISODE_NUM, EPISODE_KEY_SERIES},
+                          EPISODE_KEY_ID + "=" + episodeId, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
     }
 
     /**
@@ -206,8 +225,10 @@ public class DbAdapter {
      * @return Cursor positioned at the head of all the episodes of the series in the database.
      */
     public Cursor fetchAllEpisodes(long series) {
-        //TODO: implement fetchEpisode()
-        return null;
+        String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
+                       " WHERE " + EPISODE_KEY_SERIES + " = " + series +
+                       " ORDER BY " + EPISODE_KEY_SEASON_NUM + ", " + EPISODE_KEY_EPISODE_NUM;
+        return sDb.rawQuery(query, null);
     }
 
     /**
