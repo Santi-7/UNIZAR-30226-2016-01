@@ -77,9 +77,10 @@ public class DbAdapter {
     /**
      * Creates a new series in the database.
      * @param title of the series to be created.
+     *              title != null and title.length() > 0
      * @param description of the series to be created.
-     * @return id of the newly created series in the database.
-     * // TODO: Decide whether -1 or an exception will be return if it fails
+     *              description != null
+     * @return id of the newly created series in the database or -1 to indicate error.
      */
     public long createSeries(String title, String description) {
         if (title == null || title.equals("") || description == null) {
@@ -94,8 +95,11 @@ public class DbAdapter {
     /**
      * Updates the title and description of an existing series.
      * @param title new title for the series.
+     *              title != null and title.length() > 0
      * @param description of the series to be created.
+     *              description != null
      * @param seriesId of the series that will be updated.
+     *              seriesId > 0
      * @return true if and only if the series title could be updated.
      */
     public boolean updateSeries(String title, String description, long seriesId) {
@@ -111,6 +115,7 @@ public class DbAdapter {
     /**
      * Deletes the series [seriesId] from the database.
      * @param seriesId id of the series that will be deleted.
+     *                 seriesId > 0
      * @return true if and only if the series could be deleted.
      */
     public boolean deleteSeries(long seriesId) {
