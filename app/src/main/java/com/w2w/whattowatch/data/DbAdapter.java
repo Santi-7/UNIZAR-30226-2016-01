@@ -194,11 +194,12 @@ public class DbAdapter {
     /**
      * Deletes the episode [episodeId] from the database.
      * @param episodeId id of the episode that will be deleted.
+     *                  episodeId > 0
      * @return true if and only if the episode could be deleted from the database.
      */
     public boolean deleteEpisode(long episodeId) {
-        //TODO: implement deleteEpisode()
-        return false;
+        return episodeId > 0 &&
+                sDb.delete(DATABASE_EPISODES_TABLE, EPISODE_KEY_ID + "=" + episodeId, null) > 0;
     }
 
     /**
