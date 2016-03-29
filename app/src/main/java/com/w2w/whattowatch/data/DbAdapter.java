@@ -122,7 +122,7 @@ public class DbAdapter {
      * Retrieves the series [seriesId] from the database.
      * @param seriesId id of the series to be retrieved.
      * @return Cursor positioned at the series with id [seriesId]
-     * @throws SQLException if note could not be found/retrieved
+     * @throws SQLException if series could not be found/retrieved
      */
     public Cursor fetchSeries(long seriesId) throws SQLException {
         Cursor mCursor =
@@ -140,8 +140,8 @@ public class DbAdapter {
      * @return Cursor positioned at the head of all the series in the database.
      */
     public Cursor fetchAllSeries() {
-        // TODO: implement fetchAllSeries()
-        return null;
+        String query = "SELECT * FROM " + DATABASE_SERIES_TABLE + " ORDER BY " + SERIES_KEY_TITLE;
+        return sDb.rawQuery(query, null);
     }
 
     //////////////////////////////////////////////////////////////
