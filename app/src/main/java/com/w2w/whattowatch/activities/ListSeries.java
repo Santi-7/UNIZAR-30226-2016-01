@@ -22,13 +22,14 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
 
-    private DbAdapter mDbHelper; /* Adapter to database */
-    private ListView mList; /* List with all the series shown */
+    private DbAdapter mDbHelper; /* Database adapter */
+    private ListView mList; /* View that holds all the series in the UI */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_series);
+        // This might end up being unnecessary
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -40,6 +41,13 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
                         .setAction("Action", null).show();
             }
         });
+
+        // Series list management
+        mDbHelper = new DbAdapter(this);
+        mDbHelper.open();
+        mList = (ListView) findViewById(R.id.series_list);
+        list();
+        registerForContextMenu(mList);
     }
 
     @Override
@@ -76,11 +84,11 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         String[] from = new String[] { DbAdapter.SERIES_KEY_TITLE };
 
         // and an array of the fields we want to bind those fields to (in this case just text1)
-        int[] to = new int[] { R.id.text1 };
+        int[] to = new int[]{R.id.text};
 
         // Now create an array adapter and set it to display using our row
         SimpleCursorAdapter notes =
-                new SimpleCursorAdapter(this, R.layout.notes_row, seriesCursor, from, to);
+                new SimpleCursorAdapter(this, R.layout.series_row, seriesCursor, from, to, 0);
         mList.setAdapter(notes);
     }
 
