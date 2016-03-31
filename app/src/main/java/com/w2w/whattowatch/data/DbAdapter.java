@@ -15,12 +15,12 @@ import android.util.Log;
 public class DbAdapter {
 
     /* Database constants */
-    public static final String SERIES_KEY_ID = "s_id"; // A series' unique id field
+    public static final String SERIES_KEY_ID = "_id"; // A series' unique id field
     public static final String SERIES_KEY_TITLE = "title"; // Series title field
     public static final String SERIES_KEY_DESCRIPTION = "description"; // Series description field
     public static final String SERIES_KEY_SCORE = "score"; // Series score field
 
-    public static final String EPISODE_KEY_ID = "e_id"; // An episode's unique id field
+    public static final String EPISODE_KEY_ID = "_id"; // An episode's unique id field
     public static final String EPISODE_KEY_NAME = "name"; // Episode name field
     public static final String EPISODE_KEY_SEASON_NUM = "season"; // Season field
     public static final String EPISODE_KEY_EPISODE_NUM = "number"; // Episode number field
@@ -30,7 +30,7 @@ public class DbAdapter {
     private static final String DATABASE_NAME = "seriesDB"; // Database name
     private static final String DATABASE_SERIES_TABLE = "series"; // Name of the series table
     private static final String DATABASE_EPISODES_TABLE = "episodes"; // Name of the episode table
-    private static final int DATABASE_VERSION = 1; /* Database version, if greater than the
+    private static final int DATABASE_VERSION = 2; /* Database version, if greater than the
         oldest the database will be updated */
 
     /* SQL statement for creating the series table*/
@@ -48,9 +48,8 @@ public class DbAdapter {
                    EPISODE_KEY_NAME + " text not null, " +
                    EPISODE_KEY_SEASON_NUM + " integer, " +
                    EPISODE_KEY_EPISODE_NUM + " integer, " +
-                   EPISODE_KEY_SERIES + " integer, " +
                    EPISODE_KEY_WATCHED + " boolean, " +
-                   "foreign key (" + EPISODE_KEY_SERIES + ") references " +
+                    EPISODE_KEY_SERIES + " integer references " +
                    DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
 
     /* Adapter private variables */
@@ -74,7 +73,7 @@ public class DbAdapter {
     public DbAdapter open() {
         sDbHelper = new SeriesDatabaseHelper(ctx);
         sDb = sDbHelper.getWritableDatabase(); // Gets the database (either retrieved or created)
-        sDb.execSQL("PRAGMA foreign keys = ON;"); // Allows using foreign keys
+        sDb.execSQL("PRAGMA foreign_keys = ON;"); // Allows using foreign keys
         return this;
     }
 
@@ -278,7 +277,9 @@ public class DbAdapter {
          */
         @Override
         public void onCreate(SQLiteDatabase db) {
+            Log.d("DB", CREATE_SERIES_TABLE);
             db.execSQL(CREATE_SERIES_TABLE);
+            Log.d("DB", CREATE_EPISODE_TABLE);
             db.execSQL(CREATE_EPISODE_TABLE);
         }
 
