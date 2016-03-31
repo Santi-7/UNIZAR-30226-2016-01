@@ -12,8 +12,9 @@
     tools:context=".activities.ListSeries"
     tools:showIn="@layout/activity_list_series">
 
-    <TextView
+    <ListView
+        android:id="@+id/series_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
