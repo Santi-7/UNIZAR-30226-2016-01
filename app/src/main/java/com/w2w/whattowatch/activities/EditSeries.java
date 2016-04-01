@@ -40,7 +40,8 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         //
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
-
+        // TODO: check whether this activity was started to create or to update
+        // TODO: populate fields
         titleField = (EditText) findViewById(R.id.title_field);
         descField = (EditText) findViewById(R.id.description_field);
 
@@ -77,8 +78,8 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         saveState();
         setResult(RESULT_OK);
         // For testing purposes:
-        finish(); // TODO: Don't finish if title or description where null.
-
+        finish(); // TODO: Don't finish if title (or description?) where null.
+        // To implement the task above, saveState could return a boolean value
     }
 
     /**
@@ -88,6 +89,7 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         String title = titleField.getText().toString();
         String description = descField.getText().toString();
         // TODO: Check if title and or description are null, show warning on screen?
+        // Warning example above, "Snackbar.make...."
         if (seriesId == null) {
             long idTmp = dBAdapter.createSeries(title, description);
             if (idTmp > 0) seriesId = idTmp;
