@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">WhatToWatch</string>
-    <string name="action_settings">Settings</string>
+
     <string name="series_title">Title</string>
     <string name="series_description">Description</string>
     <string name="button_save">Save</string>
+
+    <string name="new_series">New Series</string>
+    <string name="new_episode">New Episode</string>
+
 </resources>
