@@ -16,7 +16,7 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_series);
+        setContentView(R.layout.activity_edit_series);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -30,6 +30,7 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         });
     }
 
+    // TODO: Remove menu from this class.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -45,7 +46,7 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == 1) {
             return true;
         }
 
