@@ -45,8 +45,12 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.create_new_episode:
+                create();
+                return true;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -56,14 +60,14 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface{
      * Fetches and shows all episodes from the database.
      */
     public void list(){
-
+        // TODO: Implement list()
     }
 
     /**
      * Starts an activity to create a new episode
      */
     public void create(){
-
+        // TODO: Implement create()
     }
 
     /**
@@ -71,7 +75,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface{
      * @param elementId id of the episode that will be edited
      */
     public void edit(long elementId){
-
+        // TODO: Implement edit()
     }
 
     /**
@@ -79,6 +83,6 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface{
      * @param elementId id of the episode that will be deleted
      */
     public void delete(long elementId){
-
+        // TODO: Implement delete()
     }
 }
