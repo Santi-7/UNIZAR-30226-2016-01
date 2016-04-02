@@ -49,7 +49,7 @@ public class DbAdapter {
                    EPISODE_KEY_SEASON_NUM + " integer, " +
                    EPISODE_KEY_EPISODE_NUM + " integer, " +
                    EPISODE_KEY_WATCHED + " boolean, " +
-                    EPISODE_KEY_SERIES + " integer references " +
+                   EPISODE_KEY_SERIES + " integer references " +
                    DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
 
     /* Adapter private variables */

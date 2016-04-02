@@ -23,7 +23,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
 
-    private DbAdapter mDbHelper; /* Database adapter */
+    private DbAdapter mDbAdapter; /* Database adapter */
     private ListView mList; /* View that holds all the series in the UI */
 
     @Override
@@ -44,8 +44,8 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         });
 
         // Series list management
-        mDbHelper = new DbAdapter(this);
-        mDbHelper.open();
+        mDbAdapter = new DbAdapter(this);
+        mDbAdapter.open();
         mList = (ListView) findViewById(R.id.series_list);
         list();
         registerForContextMenu(mList);
@@ -82,7 +82,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
      */
     public void list() {
         // Get all of the series from the database and create the item list
-        Cursor seriesCursor = mDbHelper.fetchAllSeries();
+        Cursor seriesCursor = mDbAdapter.fetchAllSeries();
         startManagingCursor(seriesCursor);
 
         // Create an array to specify the fields we want to display in the list (only TITLE)
@@ -122,7 +122,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
      */
     public void delete(long elementId) {
         // Series are refreshed if the current series has been correctly deleted.
-        if (mDbHelper.deleteSeries(elementId)) {
+        if (mDbAdapter.deleteSeries(elementId)) {
             list();
         }
     }
