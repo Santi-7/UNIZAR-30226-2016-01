@@ -27,7 +27,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
 
     /* Constants for the context menu*/
     private static final int EDIT_ID = Menu.FIRST;
-    private static final int DELETE_ID = Menu.FIRST +1;
+    private static final int DELETE_ID = Menu.FIRST + 1;
 
     private DbAdapter mDbAdapter; /* Database adapter */
     private ListView mList; /* View that holds all the series in the UI */
@@ -53,8 +53,25 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
         mList = (ListView) findViewById(R.id.series_list);
+        mList.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        showSeries(id);
+                    }
+                });
         list();
         registerForContextMenu(mList);
+    }
+
+    /**
+     * Starts a ListEpisodes activity for the series with id seriesId
+     * @param seriesId id of the series which info will be displayed on the to-be-started activity.
+     */
+    private void showSeries(long seriesId) {
+        Intent intent = new Intent(this, ListEpisodes.class);
+        intent.putExtra("sid", seriesId);
+        startActivity(intent);
     }
 
     @Override
@@ -102,7 +119,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 delete(info.id);
@@ -126,7 +143,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         startManagingCursor(seriesCursor);
 
         // Create an array to specify the fields we want to display in the list (only TITLE)
-        String[] from = new String[] { DbAdapter.SERIES_KEY_TITLE };
+        String[] from = new String[]{DbAdapter.SERIES_KEY_TITLE};
 
         // and an array of the fields we want to bind those fields to (in this case just text1)
         int[] to = new int[]{R.id.text};
@@ -148,6 +165,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
 
     /**
      * Starts an activity to edit a series
+     *
      * @param elementId id of the series that will be edited
      */
     // TODO: This method creates another note instead of editing it
@@ -159,6 +177,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
 
     /**
      * Deletes the series elementId
+     *
      * @param elementId id of the series that will be deleted
      */
     public void delete(long elementId) {
