@@ -8,6 +8,12 @@
     <string name="new_series">New Series</string>
     <string name="new_episode">New Episode</string>
 
+    <string name="edit_series">Edit Series</string>
+    <string name="edit_episode">Edit Episode</string>
+
+    <string name="delete_series">Delete Series</string>
+    <string name="delete_episode">Delete Episode</string>
+
     <string name="episode_name">Name</string>
     <string name="episode_season">Season</string>
     <string name="episode_number">Number</string>

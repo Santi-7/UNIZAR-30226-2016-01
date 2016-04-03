@@ -8,9 +8,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -22,6 +24,10 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     /* Constants to create or edit a series in the activity created. */
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
+
+    /* Constants for the context menu*/
+    private static final int EDIT_ID = Menu.FIRST;
+    private static final int DELETE_ID = Menu.FIRST +1;
 
     private DbAdapter mDbAdapter; /* Database adapter */
     private ListView mList; /* View that holds all the series in the UI */
@@ -69,12 +75,43 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         switch (id) {
             case R.id.create_new_series:
                 create();
+                list();
                 return true;
             default:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * Method that creates an options menu when a user clicks and holds on a series
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.edit_series);
+        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case DELETE_ID:
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                delete(info.id);
+                list();
+                return true;
+            case EDIT_ID:
+                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                edit(info.id);
+                return true;
+        }
+        list();
+        return super.onContextItemSelected(item);
     }
 
     /**
@@ -110,6 +147,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
      * Starts an activity to edit a series
      * @param elementId id of the series that will be edited
      */
+    // TODO: This method creates another note instead of editing it
     public void edit(long elementId) {
         Intent i = new Intent(this, EditSeries.class);
         i.putExtra(DbAdapter.SERIES_KEY_ID, elementId);
@@ -127,4 +165,12 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         }
     }
 
+    /**
+     * Method that runs when an activity returns (for now just list again after editing)
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        list();
+    }
 }
