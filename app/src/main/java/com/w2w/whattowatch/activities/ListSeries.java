@@ -97,6 +97,9 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
     }
 
+    /**
+     * Method called when a contextmenu option is selected
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch(item.getItemId()) {
