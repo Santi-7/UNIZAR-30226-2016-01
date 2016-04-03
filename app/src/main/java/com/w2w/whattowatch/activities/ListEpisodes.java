@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,12 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface{
                         .setAction("Action", null).show();
             }
         });
+
+        long seriesId = (Long) this.getIntent().getExtras().get("sid");
+        Log.d("ListEpisodes: ", "Started for series: " + seriesId);
+        //TODO: Implement UI, this includes using fragments.
+        //TODO: Retrieve info for seriesId and fill the UI
+
     }
 
     @Override
