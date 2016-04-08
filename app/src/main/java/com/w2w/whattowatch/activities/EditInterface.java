@@ -13,8 +13,6 @@ public interface EditInterface {
 
     /**
      * Fills all user input fields with previously existing information from the database.
-     * @param elementId id of the element which information will be retrieved to the input
-     *      fields from the database.
      */
-    void populateFields(long elementId);
+    void populateFields();
 }

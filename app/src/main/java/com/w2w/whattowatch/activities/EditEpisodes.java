@@ -62,10 +62,8 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
 
     /**
      * Fills all user input fields with previously existing information from the database.
-     * @param elementId id of the episode which information will be retrieved to the input
-     *      fields from the database.
      */
-    public void populateFields(long elementId){
+    public void populateFields(){
         // TODO: implement populateFields
     }
 

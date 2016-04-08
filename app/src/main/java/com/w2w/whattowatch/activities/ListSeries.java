@@ -29,8 +29,8 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     private static final int EDIT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
 
-    private DbAdapter mDbAdapter; /* Database adapter */
-    private ListView mList; /* View that holds all the series in the UI */
+    private DbAdapter mDbAdapter; // Database adapter
+    private ListView mList;       // View that holds all the series in the UI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
