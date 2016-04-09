@@ -2,12 +2,7 @@ package com.w2w.whattowatch.activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,8 +27,6 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         dBAdapter.open();
 
         setContentView(R.layout.activity_edit_series);
-        // TODO: check why this doesn't work
-        setTitle(R.string.edit_series);
 
         // TODO: check whether this activity was started to create or to update
         // TODO: populate fields
