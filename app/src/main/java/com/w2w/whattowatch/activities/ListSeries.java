@@ -3,15 +3,13 @@ package com.w2w.whattowatch.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -39,15 +37,6 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         // This might end up being unnecessary
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Series list management
         mDbAdapter = new DbAdapter(this);
@@ -146,7 +135,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         String[] from = new String[]{DbAdapter.SERIES_KEY_TITLE};
 
         // and an array of the fields we want to bind those fields to (in this case just text1)
-        int[] to = new int[]{R.id.text};
+        int[] to = new int[]{R.id.series_title};
 
         // Now create an array adapter and set it to display using our row
         SimpleCursorAdapter notes =
