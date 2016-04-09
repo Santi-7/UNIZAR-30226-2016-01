@@ -17,6 +17,11 @@
     <string name="episode_name">Name</string>
     <string name="episode_season">Season</string>
     <string name="episode_number">Number</string>
-
+    <string name="title_activity_season">Season</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Season%1$d</string>
+    <string name="title_activity_list_episodes">ListEpisodes</string>
+    <string name="title_activity_list_episodes2">" "</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>
