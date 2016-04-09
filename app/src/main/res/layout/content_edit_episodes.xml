@@ -30,7 +30,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText" />
+            android:id="@+id/name_field"
+            android:inputType="text"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -62,6 +63,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -70,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText2"
+                android:id="@+id/season_field"
                 android:layout_marginLeft="44dp"
                 android:layout_marginStart="44dp"
                 android:layout_marginTop="25dp"
@@ -83,8 +85,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText3"
-                android:layout_alignTop="@+id/editText2"
+                android:id="@+id/number_field"
+                android:layout_alignTop="@+id/season_field"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="59dp"
@@ -95,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/button_save"
                 android:id="@+id/save_button"
-                android:layout_below="@+id/editText2"
+                android:layout_below="@+id/season_field"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="32dp" />
