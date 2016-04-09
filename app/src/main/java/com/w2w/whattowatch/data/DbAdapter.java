@@ -160,7 +160,8 @@ public class DbAdapter {
      */
     public Cursor fetchAllSeries() {
         String query = "SELECT * FROM " + DATABASE_SERIES_TABLE + " ORDER BY " + SERIES_KEY_TITLE;
-        return sDb.rawQuery(query, null);
+        Cursor value = sDb.rawQuery(query, null);
+        return value;
     }
 
     //////////////////////////////////////////////////////////////
@@ -254,6 +255,27 @@ public class DbAdapter {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
                        " WHERE " + EPISODE_KEY_SERIES + " = " + series +
                        " ORDER BY " + EPISODE_KEY_SEASON_NUM + ", " + EPISODE_KEY_EPISODE_NUM;
+        return sDb.rawQuery(query, null);
+    }
+
+    /**
+     * Get the number of seasons of a series
+     * @param series series which number of seasons will be returned
+     * @return number of seasons of series
+     */
+    public Cursor getNumberOfSeasons(long series){
+        String query = "SELECT COUNT(DISTINCT " + EPISODE_KEY_SEASON_NUM + ") as seasons FROM " +
+                        DATABASE_EPISODES_TABLE +   " WHERE " + EPISODE_KEY_SERIES + " = "
+                        + series ;
+        Cursor value = sDb.rawQuery(query, null);
+        return value;
+    }
+
+    public Cursor fetchSeason(long series, int season){
+        String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
+                " WHERE " + EPISODE_KEY_SERIES + " = " + series + " AND " + EPISODE_KEY_SEASON_NUM +
+                " = " + season +  " ORDER BY " + EPISODE_KEY_SEASON_NUM + ", " +
+                EPISODE_KEY_EPISODE_NUM;
         return sDb.rawQuery(query, null);
     }
 
