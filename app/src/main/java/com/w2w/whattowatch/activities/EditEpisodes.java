@@ -1,12 +1,11 @@
 package com.w2w.whattowatch.activities;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,37 +26,42 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_episodes);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        // Database adapter.
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
-
+        // TODO: Title doesn't work. There is no title. Fix it
+        setContentView(R.layout.activity_edit_episodes);
+        setTitle(R.string.edit_episode);
+        // TODO: Check if we can delete it.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // If editing, it retrieves series' fields (name, seasonNumber and episodeNumber).
         nameField = (EditText) findViewById(R.id.name_field);
         seasonField = (EditText) findViewById(R.id.season_field);
         numberField = (EditText) findViewById(R.id.number_field);
-
-        seriesId = (savedInstanceState == null) ? null :
-                (Long) savedInstanceState.getSerializable(DbAdapter.SERIES_KEY_ID);
-        if (seriesId == null) {
-            Bundle extras = getIntent().getExtras();
-            seriesId = (extras != null) ? extras.getLong(DbAdapter.SERIES_KEY_ID)
-                    : null;
-        }
+        // Save button.
         Button confirmButton = (Button) findViewById(R.id.save_button);
+
+        episodeId = (savedInstanceState == null) ? null :
+                    (Long) savedInstanceState.getSerializable(DbAdapter.EPISODE_KEY_ID);
+        if (episodeId == null) {
+            Bundle extras = getIntent().getExtras();
+            episodeId = (extras != null) ? extras.getLong(DbAdapter.EPISODE_KEY_ID) :
+                         null;
+        }
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                setResult(RESULT_OK);
-                checkAndFinish();
+            setResult(RESULT_OK);
+            //checkAndFinish();
+            finish();
             }
 
         });
     }
 
-
-
-    private void checkAndFinish() {
+    /*private void checkAndFinish() {
         boolean error = false;
         try {
             nameField.getText().toString();
@@ -75,7 +79,7 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         } else {
             finish();
         }
-    }
+    }*/
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -95,41 +99,54 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         super.onResume();
         populateFields();
     }
+
     /**
      * Saves all user inputs to the database as an episode
      */
-    public void saveState(){
+    public void saveState() {
+        //String title = titleField.getText().toString();
+        //String description = descField.getText().toString();
         String name = null;
-        int season = -1, number = -1;
-        try{
+        int season = 0, number = 0;
+        try {
             name = nameField.getText().toString();
             season = Integer.parseInt(seasonField.getText().toString());
             number = Integer.parseInt(numberField.getText().toString());
         }
-        catch(Exception e){
-            Log.d("SAVESTATE FAIL", episodeId+"");
-            Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+        catch(Exception e) {
+            //Log.d("SAVESTATE FAIL", episodeId+"");
+            //Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
+            //        .setAction("Action", null).show();
         }
-
-
-        if(name!=null && season >-1 && number >-1){
-            if (episodeId == null) {
-                Log.d("NEW EPISODE", name + " " + season + " " + number + " " + seriesId);
-                long idTmp = dBAdapter.createEpisode(name, season, number, seriesId);
-                if (idTmp > 0) episodeId = idTmp;
-            } else {
-                dBAdapter.updateEpisode(name, season, number, seriesId, episodeId);
-            }
+        // The episode hasn't been yet created.
+        if (episodeId == null) {
+            // If fields are incorrect, [create] will return negative value.
+            long idTmp = dBAdapter.createEpisode(name, season, number, seriesId);
+            // The episode has been correctly created
+            if (idTmp > 0) episodeId = idTmp;
         }
-
+        // The episode has already been created.
+        else {
+            dBAdapter.updateEpisode(name, season, number, seriesId, episodeId);
+        }
     }
 
     /**
      * Fills all user input fields with previously existing information from the database.
      */
-    public void populateFields(){
-        // TODO: implement populateFields
+    public void populateFields() {
+        if (episodeId != null) {
+            Cursor episode = dBAdapter.fetchEpisode(episodeId);
+            startManagingCursor(episode);
+            // Name of the episode.
+            nameField.setText(episode.getString(
+                    episode.getColumnIndexOrThrow(DbAdapter.EPISODE_KEY_NAME)));
+            // Season number of the episode.
+            seasonField.setText(episode.getString(
+                    episode.getColumnIndexOrThrow(DbAdapter.EPISODE_KEY_SEASON_NUM)));
+            // Number of the episode.
+            numberField.setText(episode.getString(
+                    episode.getColumnIndexOrThrow(DbAdapter.EPISODE_KEY_EPISODE_NUM)));
+        }
     }
-
 }

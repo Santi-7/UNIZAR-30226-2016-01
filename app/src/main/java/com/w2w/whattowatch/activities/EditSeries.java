@@ -21,16 +21,16 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Database adapter
+        // Database adapter.
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
         // TODO: Title doesn't work. There is no title. Fix it
         setContentView(R.layout.activity_edit_series);
         setTitle(R.string.edit_series);
-        // If editing, it retrieves series' fields
+        // If editing, it retrieves series' fields (title and description).
         titleField = (EditText) findViewById(R.id.title_field);
         descField = (EditText) findViewById(R.id.description_field);
-        // Save button
+        // Save button.
         Button confirmButton = (Button) findViewById(R.id.save_button);
 
         seriesId = (savedInstanceState == null) ? null :
@@ -76,12 +76,13 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
     public void saveState() {
         String title = titleField.getText().toString();
         String description = descField.getText().toString();
-        // TODO: Check if title and or description are null, show warning on screen?
-        // Warning example above, "Snackbar.make...."
+        // The series hasn't been yet created.
         if (seriesId == null) {
+            // If title or description null, [create] will return negative value.
             long idTmp = dBAdapter.createSeries(title, description);
-            // The series has been correctly created
+            // The series has been correctly created.
             if (idTmp > 0) seriesId = idTmp;
+        // The series has already been created.
         } else {
             dBAdapter.updateSeries(title, description, seriesId);
         }
@@ -94,10 +95,10 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         if (seriesId != null) {
             Cursor series = dBAdapter.fetchSeries(seriesId);
             startManagingCursor(series);
-            // Title of the series
+            // Title of the series.
             titleField.setText(series.getString(
                     series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_TITLE)));
-            // Description of the series
+            // Description of the series.
             descField.setText(series.getString(
                     series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION)));
         }
