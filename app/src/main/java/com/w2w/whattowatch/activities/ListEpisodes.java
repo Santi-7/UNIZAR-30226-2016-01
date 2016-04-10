@@ -168,10 +168,11 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      * Starts an activity to create a new episode.
      */
     public void create() {
-        Log.d("ListSeries", "Create new series");
+        Log.d("ListEpisodes", "Create new episode");
         Intent i = new Intent(this, EditEpisodes.class);
-        i.putExtra(DbAdapter.SERIES_KEY_ID, seriesId);
-        startActivityForResult(i, 0);
+        i.putExtra(DbAdapter.EPISODE_KEY_ID, Long.valueOf(0));
+        i.putExtra(DbAdapter.EPISODE_KEY_SERIES, seriesId);
+        startActivityForResult(i, ACTIVITY_CREATE);
     }
 
     /**
@@ -181,7 +182,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      */
     public void edit(long elementId) {
         Intent i = new Intent(this, EditEpisodes.class);
-        i.putExtra(DbAdapter.SERIES_KEY_ID, seriesId);
+        i.putExtra(DbAdapter.EPISODE_KEY_SERIES, seriesId);
         i.putExtra(DbAdapter.EPISODE_KEY_ID, elementId);
         startActivityForResult(i, ACTIVITY_EDIT);
     }

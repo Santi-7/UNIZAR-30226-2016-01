@@ -214,7 +214,7 @@ public class DbAdapter {
         args.put(EPISODE_KEY_EPISODE_NUM, number);
         args.put(EPISODE_KEY_SERIES, series);
         return sDb.update(DATABASE_EPISODES_TABLE, args,
-                EPISODE_KEY_NAME + "=" + episodeId, null) > 0;
+                EPISODE_KEY_ID + "=" + episodeId, null) > 0;
     }
 
     /**

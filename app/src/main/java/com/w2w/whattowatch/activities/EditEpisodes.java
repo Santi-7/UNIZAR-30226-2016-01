@@ -2,7 +2,6 @@ package com.w2w.whattowatch.activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -46,8 +45,9 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
                     (Long) savedInstanceState.getSerializable(DbAdapter.EPISODE_KEY_ID);
         if (episodeId == null) {
             Bundle extras = getIntent().getExtras();
-            episodeId = (extras != null) ? extras.getLong(DbAdapter.EPISODE_KEY_ID) :
-                         null;
+            episodeId = extras.getLong(DbAdapter.EPISODE_KEY_ID);
+            if (episodeId == 0) episodeId = null;
+            seriesId = extras.getLong(DbAdapter.EPISODE_KEY_SERIES);
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +127,9 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         }
         // The episode has already been created.
         else {
-            dBAdapter.updateEpisode(name, season, number, seriesId, episodeId);
+            if (!dBAdapter.updateEpisode(name, season, number, seriesId, episodeId)) {
+                Log.d("ERROR", "Failed to update series");
+            }
         }
     }
 
