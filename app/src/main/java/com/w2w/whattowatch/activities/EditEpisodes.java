@@ -102,10 +102,10 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
     }
 
     /**
-     * Saves all user inputs to the database as an episode
+     * Saves all user inputs to the database as an episode.
      */
     public void saveState() {
-        String name = name = nameField.getText().toString();
+        String name = nameField.getText().toString();
         int season = 0, number = 0;
         try {
             season = Integer.parseInt(seasonField.getText().toString());
@@ -120,7 +120,7 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         if (episodeId == null) {
             // If fields are incorrect, [create] will return negative value.
             long idTmp = dBAdapter.createEpisode(name, season, number, seriesId);
-            // The episode has been correctly created
+            // The episode has been correctly created.
             if (idTmp > 0) episodeId = idTmp;
         }
         // The episode has already been created.
