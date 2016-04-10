@@ -22,13 +22,10 @@ import android.widget.SimpleCursorAdapter;
 
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
-import com.w2w.whattowatch.data.Episode;
 
-import java.util.ArrayList;
 
 public class ListEpisodes extends AppCompatActivity implements ListInterface {
 
-    ArrayList<Episode> episodes;
     private DbAdapter mDbAdapter;
     private long seriesId;
     private String seriesTitle;
@@ -128,7 +125,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_episodes2, menu);
+        getMenuInflater().inflate(R.menu.menu_list_episodes, menu);
         return true;
     }
 
