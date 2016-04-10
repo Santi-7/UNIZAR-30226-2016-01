@@ -24,4 +24,7 @@
     <string name="title_activity_list_episodes2">" "</string>
     <string name="title_activity_main">MainActivity</string>
 
+
+    <string name="space">\ </string>
+    <string name="EDot">E.</string>
 </resources>
