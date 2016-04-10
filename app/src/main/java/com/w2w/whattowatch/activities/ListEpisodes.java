@@ -27,10 +27,10 @@ import com.w2w.whattowatch.data.DbAdapter;
 
 public class ListEpisodes extends AppCompatActivity implements ListInterface {
 
-    private DbAdapter mDbAdapter;
-    private long seriesId;
-    private String seriesTitle;
-    private String seriesDescription;
+    private DbAdapter mDbAdapter;       // Database adapter
+    private long seriesId;              // Identifier of current Series
+    private String seriesTitle;         // Title of current Series
+    private String seriesDescription;   // Description of current Series
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -91,7 +91,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Method that creates an options menu when a user clicks and holds on a series
+     * Method that creates an options menu when a user clicks and holds on a series.
      */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -103,7 +103,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Method called when a ContextMenu option is selected
+     * Method called when a ContextMenu option is selected.
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -122,13 +122,15 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Method that runs when an activity returns (for now just list again after editing)
+     * Method that runs when an activity returns (for now just list again after editing).
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         list();
     }
+
+    /////////////////////////////////////// ListInterface ///////////////////////////////////////
 
     /**
      * Fetches and shows all episodes from the database.
@@ -163,7 +165,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Starts an activity to create a new episode
+     * Starts an activity to create a new episode.
      */
     public void create() {
         Log.d("ListSeries", "Create new series");
@@ -173,9 +175,9 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Starts an activity to edit an episode
+     * Starts an activity to edit an episode.
      *
-     * @param elementId id of the episode that will be edited
+     * @param elementId id of the episode that will be edited.
      */
     public void edit(long elementId) {
         Intent i = new Intent(this, EditEpisodes.class);
@@ -184,9 +186,9 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Deletes the episode elementId
+     * Deletes the episode elementId.
      *
-     * @param elementId id of the episode that will be deleted
+     * @param elementId id of the episode that will be deleted.
      */
     public void delete(long elementId) {
         // Episodes are refreshed if the current episode has been correctly deleted.
@@ -212,8 +214,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     public static class PlaceholderFragment extends Fragment {
 
         /**
-         * The fragment argument representing the section number for this
-         * fragment.
+         * The fragment argument representing the section number for this fragment.
          */
         private static final String ARG_SEASON_NUMBER = "section_number";
         private static final String ARG_SERIES_ID = "series_id";
@@ -223,8 +224,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         public PlaceholderFragment() { }
 
         /**
-         * Returns a new instance of this fragment for the given section
-         * number.
+         * Returns a new instance of this fragment for the given section number.
          */
         public static PlaceholderFragment newInstance(int seasonNumber, long seriesId) {
             PlaceholderFragment fragment = new PlaceholderFragment();
@@ -246,13 +246,13 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
                                                      getArguments().getInt(ARG_SEASON_NUMBER));
             getActivity().startManagingCursor(episodes);
             // Create an array to specify the fields we want to display in the list
-            // (the episode number, and if exists, also the name)
+            // (the episode number, and if exists, also the name).
             String[] from = new String[]
                     {DbAdapter.EPISODE_KEY_EPISODE_NUM, DbAdapter.EPISODE_KEY_NAME};
-            // and an array of the fields we want to bind those fields to
+            // and an array of the fields we want to bind those fields to.
             int[] to = new int[]{R.id.episode_number, R.id.episode_name};
 
-            // Now create an array adapter and set it to display using our row
+            // Now create an array adapter and set it to display using our row.
             SimpleCursorAdapter adapter =  new SimpleCursorAdapter(
                     this.getActivity(), R.layout.episode_row, episodes, from, to, 0);
             ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);

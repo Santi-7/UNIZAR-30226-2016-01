@@ -46,16 +46,6 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         registerForContextMenu(mList);
     }
 
-    /**
-     * Starts a ListEpisodes activity for the series with id seriesId
-     * @param seriesId id of the series which info will be displayed on the to-be-started activity.
-     */
-    private void showSeries(long seriesId) {
-        Intent intent = new Intent(this, ListEpisodes.class);
-        intent.putExtra("sid", seriesId);
-        startActivity(intent);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -79,7 +69,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Method that creates an options menu when a user clicks and holds on a series
+     * Method that creates an options menu when a user clicks and holds on a series.
      */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -90,7 +80,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Method called when a contextmenu option is selected
+     * Method called when a ContextMenu option is selected.
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -109,7 +99,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Method that runs when an activity returns (for now just list again after editing)
+     * Method that runs when an activity returns (for now just list again after editing).
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -118,28 +108,27 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         list();
     }
 
+    /////////////////////////////////////// ListInterface ///////////////////////////////////////
+
     /**
      * Fetches and shows all series from the database.
      */
     public void list() {
-        // Get all of the series from the database and create the item list
+        // Get all of the series from the database and create the item list.
         Cursor seriesCursor = mDbAdapter.fetchAllSeries();
         startManagingCursor(seriesCursor);
-
-        // Create an array to specify the fields we want to display in the list (only TITLE)
+        // Create an array to specify the fields we want to display in the list (only TITLE).
         String[] from = new String[]{DbAdapter.SERIES_KEY_TITLE};
-
-        // and an array of the fields we want to bind those fields to (series_title)
+        // and an array of the fields we want to bind those fields to (series_title).
         int[] to = new int[]{R.id.series_title};
-
-        // Now create an array adapter and set it to display using our row
+        // Now create an array adapter and set it to display using our row.
         SimpleCursorAdapter notes =
                 new SimpleCursorAdapter(this, R.layout.series_row, seriesCursor, from, to, 0);
         mList.setAdapter(notes);
     }
 
     /**
-     * Starts an activity to create a new series
+     * Starts an activity to create a new series.
      */
     public void create() {
         Log.d("ListSeries", "Create new series");
@@ -148,9 +137,9 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Starts an activity to edit a series
+     * Starts an activity to edit a series.
      *
-     * @param elementId id of the series that will be edited
+     * @param elementId id of the series that will be edited.
      */
     public void edit(long elementId) {
         Intent i = new Intent(this, EditSeries.class);
@@ -159,14 +148,24 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Deletes the series elementId
+     * Deletes the series elementId.
      *
-     * @param elementId id of the series that will be deleted
+     * @param elementId id of the series that will be deleted.
      */
     public void delete(long elementId) {
         // Series are refreshed if the current series has been correctly deleted.
         if (mDbAdapter.deleteSeries(elementId)) {
             list();
         }
+    }
+
+    /**
+     * Starts a ListEpisodes activity for the series with id seriesId.
+     * @param seriesId id of the series which info will be displayed on the to-be-started activity.
+     */
+    private void showSeries(long seriesId) {
+        Intent intent = new Intent(this, ListEpisodes.class);
+        intent.putExtra("sid", seriesId);
+        startActivity(intent);
     }
 }
