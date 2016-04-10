@@ -16,13 +16,13 @@ import com.w2w.whattowatch.data.DbAdapter;
 
 public class EditEpisodes extends AppCompatActivity implements EditInterface {
 
-    private EditText nameField; // Name text field
-    private EditText seasonField;  // Season number text field
-    private EditText numberField;  // Number of the episode text field
-    private Long seriesId;         // Series the episode belongs to
-    private Long episodeId;       // Episode ID, only set when this activity
-    // is called to edit an episode
-    private DbAdapter dBAdapter; // Database adapter
+    private EditText nameField;     // Name text field
+    private EditText seasonField;   // Season number text field
+    private EditText numberField;   // Number of the episode text field
+    private Long seriesId;          // Series the episode belongs to
+    private Long episodeId;         // Episode ID, only set when this activity
+                                    // is called to edit an episode
+    private DbAdapter dBAdapter;    // Database adapter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

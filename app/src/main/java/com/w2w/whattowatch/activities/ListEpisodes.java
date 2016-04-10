@@ -23,19 +23,22 @@ import android.widget.SimpleCursorAdapter;
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
 
-
 public class ListEpisodes extends AppCompatActivity implements ListInterface {
+
+    /* Constants to create or edit a episode in the activity created. */
+    private static final int ACTIVITY_CREATE = 0;
+    private static final int ACTIVITY_EDIT = 1;
 
     private DbAdapter mDbAdapter;
     private long seriesId;
     private String seriesTitle;
     private String seriesDescription;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
+     * fragments for each of the sections. We use a  {@link FragmentPagerAdapter}
+     * derivative, which will keep every loaded fragment in memory.
+     * If this becomes too memory intensive, it may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -72,7 +75,8 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         startManagingCursor(series);
         seriesTitle = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_TITLE));
         getSupportActionBar().setTitle(seriesTitle);
-        seriesDescription = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION));
+        seriesDescription = series.getString(
+                series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION));
 
         Cursor eCursor = mDbAdapter.getNumberOfSeasons(seriesId);
         int numOfSeasons;
@@ -111,7 +115,9 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      * @param elementId id of the episode that will be edited
      */
     public void edit(long elementId) {
-        // TODO: Implement edit()
+        Intent i = new Intent(this, EditEpisodes.class);
+        i.putExtra(DbAdapter.EPISODE_KEY_ID, elementId);
+        startActivityForResult(i, ACTIVITY_EDIT);
     }
 
     /**
@@ -120,8 +126,12 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      * @param elementId id of the episode that will be deleted
      */
     public void delete(long elementId) {
-        // TODO: Implement delete()
+        // Episodes are refreshed if the current episode has been correctly deleted.
+        if (mDbAdapter.deleteEpisode(elementId)) {
+            list();
+        }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -159,6 +169,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
+
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -168,8 +179,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
 
         private DbAdapter mDbAdapter;
 
-        public PlaceholderFragment() {
-        }
+        public PlaceholderFragment() { }
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -191,16 +201,19 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
             mDbAdapter.open();
             View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
             // Get seriesId and fetch episodes for the season.
-            Cursor episodes = mDbAdapter.fetchSeason(getArguments().getLong(ARG_SERIES_ID), getArguments().getInt(ARG_SEASON_NUMBER));
+            Cursor episodes = mDbAdapter.fetchSeason(getArguments().getLong(ARG_SERIES_ID),
+                                                     getArguments().getInt(ARG_SEASON_NUMBER));
             getActivity().startManagingCursor(episodes);
-            // Create an array to specify the fields we want to display in the list (only TITLE)
-            String[] from = new String[]{DbAdapter.EPISODE_KEY_EPISODE_NUM, DbAdapter.EPISODE_KEY_NAME}; //, DbAdapter.EPISODE_KEY_NAME
-            // and an array of the fields we want to bind those fields to (in this case just text1)
-            int[] to = new int[]{R.id.episode_number, R.id.episode_name}; // , R.id.episode_title
+            // Create an array to specify the fields we want to display in the list
+            // (the episode number, and if exists, also the name)
+            String[] from = new String[]
+                    {DbAdapter.EPISODE_KEY_EPISODE_NUM, DbAdapter.EPISODE_KEY_NAME};
+            // and an array of the fields we want to bind those fields to
+            int[] to = new int[]{R.id.episode_number, R.id.episode_name};
 
             // Now create an array adapter and set it to display using our row
-            SimpleCursorAdapter adapter =
-                    new SimpleCursorAdapter(this.getActivity(), R.layout.episode_row, episodes, from, to, 0);
+            SimpleCursorAdapter adapter =  new SimpleCursorAdapter(
+                    this.getActivity(), R.layout.episode_row, episodes, from, to, 0);
             ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
             episodeList.setAdapter(adapter);
             return rootView;

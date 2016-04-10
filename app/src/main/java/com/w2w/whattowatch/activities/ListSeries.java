@@ -134,7 +134,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         // Create an array to specify the fields we want to display in the list (only TITLE)
         String[] from = new String[]{DbAdapter.SERIES_KEY_TITLE};
 
-        // and an array of the fields we want to bind those fields to (in this case just text1)
+        // and an array of the fields we want to bind those fields to (series_title)
         int[] to = new int[]{R.id.series_title};
 
         // Now create an array adapter and set it to display using our row

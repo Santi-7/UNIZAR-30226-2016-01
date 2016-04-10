@@ -265,8 +265,7 @@ public class DbAdapter {
      */
     public Cursor getNumberOfSeasons(long series){
         String query = "SELECT COUNT(DISTINCT " + EPISODE_KEY_SEASON_NUM + ") as seasons FROM " +
-                        DATABASE_EPISODES_TABLE +   " WHERE " + EPISODE_KEY_SERIES + " = "
-                        + series ;
+                        DATABASE_EPISODES_TABLE +   " WHERE " + EPISODE_KEY_SERIES + " = " + series;
         Cursor value = sDb.rawQuery(query, null);
         return value;
     }
