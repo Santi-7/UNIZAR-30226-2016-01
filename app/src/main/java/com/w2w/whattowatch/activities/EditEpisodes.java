@@ -55,28 +55,7 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         });
     }
 
-    // TODO: Remove menu from this class.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_series, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == 1) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private void checkAndFinish() {
         boolean error = false;
@@ -120,17 +99,30 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
      * Saves all user inputs to the database as an episode
      */
     public void saveState(){
-        String name = nameField.getText().toString();
-        int season = Integer.parseInt(seasonField.getText().toString());
-        int number = Integer.parseInt(numberField.getText().toString());
-
-        if (episodeId == null) {
-            Log.d("NEW EPISODE", name + " " + season + " " + number + " " + seriesId);
-            long idTmp = dBAdapter.createEpisode(name, season, number, seriesId);
-            if (idTmp > 0) episodeId = idTmp;
-        } else {
-            dBAdapter.updateEpisode(name, season, number, seriesId, episodeId);
+        String name = null;
+        int season = -1, number = -1;
+        try{
+            name = nameField.getText().toString();
+            season = Integer.parseInt(seasonField.getText().toString());
+            number = Integer.parseInt(numberField.getText().toString());
         }
+        catch(Exception e){
+            Log.d("SAVESTATE FAIL", episodeId+"");
+            Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+
+
+        if(name!=null && season >-1 && number >-1){
+            if (episodeId == null) {
+                Log.d("NEW EPISODE", name + " " + season + " " + number + " " + seriesId);
+                long idTmp = dBAdapter.createEpisode(name, season, number, seriesId);
+                if (idTmp > 0) episodeId = idTmp;
+            } else {
+                dBAdapter.updateEpisode(name, season, number, seriesId, episodeId);
+            }
+        }
+
     }
 
     /**
