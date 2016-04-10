@@ -18,18 +18,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".activities.ListEpisodes"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
         <activity
             android:name=".activities.EditSeries"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.EditEpisodes"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ListEpisodes"
+            android:label="@string/title_activity_list_episodes2"
+            android:parentActivityName=".activities.ListSeries"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.w2w.whattowatch.activities.ListSeries" />
+        </activity>
     </application>
 
 </manifest>
