@@ -160,8 +160,7 @@ public class DbAdapter {
      */
     public Cursor fetchAllSeries() {
         String query = "SELECT * FROM " + DATABASE_SERIES_TABLE + " ORDER BY " + SERIES_KEY_TITLE;
-        Cursor value = sDb.rawQuery(query, null);
-        return value;
+        return sDb.rawQuery(query, null);
     }
 
     //////////////////////////////////////////////////////////////
@@ -266,8 +265,7 @@ public class DbAdapter {
     public Cursor getNumberOfSeasons(long series){
         String query = "SELECT COUNT(DISTINCT " + EPISODE_KEY_SEASON_NUM + ") as seasons FROM " +
                         DATABASE_EPISODES_TABLE +   " WHERE " + EPISODE_KEY_SERIES + " = " + series;
-        Cursor value = sDb.rawQuery(query, null);
-        return value;
+        return sDb.rawQuery(query, null);
     }
 
     public Cursor fetchSeason(long series, int season){

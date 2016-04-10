@@ -77,16 +77,17 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.create_new_episode) {
-            create();
-            list();
-            return true;
-        } else {
-            return false;
+        switch (item.getItemId()) {
+            case R.id.create_new_episode:
+                create();
+                return true;
+            case R.id.edit_series:
+                editSeries();
+                return true;
+            default:
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -102,7 +103,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     }
 
     /**
-     * Method called when a contextmenu option is selected
+     * Method called when a ContextMenu option is selected
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -193,6 +194,17 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
             list();
         }
     }
+
+    /**
+     * Starts an activity to edit the current series (with identifier [seriesId]).
+     */
+    public void editSeries() {
+        Intent i = new Intent(this, EditSeries.class);
+        i.putExtra(DbAdapter.SERIES_KEY_ID, seriesId);
+        startActivityForResult(i, ACTIVITY_EDIT);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * A placeholder fragment containing a simple view.
