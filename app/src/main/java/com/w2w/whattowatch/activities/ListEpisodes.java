@@ -181,6 +181,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      */
     public void edit(long elementId) {
         Intent i = new Intent(this, EditEpisodes.class);
+        i.putExtra(DbAdapter.SERIES_KEY_ID, seriesId);
         i.putExtra(DbAdapter.EPISODE_KEY_ID, elementId);
         startActivityForResult(i, ACTIVITY_EDIT);
     }
