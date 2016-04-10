@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/new_episode"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/edit_series"
+        android:orderInCategory="100"
+        android:title="@string/edit_series"
+        app:showAsAction="never" />
 </menu>

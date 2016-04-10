@@ -21,33 +21,31 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Database adapter
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
-
+        // TODO: Title doesn't work. There is no title. Fix it
         setContentView(R.layout.activity_edit_series);
-
-        // TODO: check whether this activity was started to create or to update
-        // TODO: populate fields
+        setTitle(R.string.edit_series);
+        // If editing, it retrieves series' fields
         titleField = (EditText) findViewById(R.id.title_field);
         descField = (EditText) findViewById(R.id.description_field);
-
+        // Save button
         Button confirmButton = (Button) findViewById(R.id.save_button);
 
         seriesId = (savedInstanceState == null) ? null :
                    (Long) savedInstanceState.getSerializable(DbAdapter.SERIES_KEY_ID);
         if (seriesId == null) {
             Bundle extras = getIntent().getExtras();
-            seriesId = (extras != null) ? extras.getLong(DbAdapter.SERIES_KEY_ID)
-                       : null;
+            seriesId = (extras != null) ? extras.getLong(DbAdapter.SERIES_KEY_ID) :
+                        null;
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                setResult(RESULT_OK);
-                finish();
+            setResult(RESULT_OK);
+            finish();
             }
 
         });
@@ -82,6 +80,7 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         // Warning example above, "Snackbar.make...."
         if (seriesId == null) {
             long idTmp = dBAdapter.createSeries(title, description);
+            // The series has been correctly created
             if (idTmp > 0) seriesId = idTmp;
         } else {
             dBAdapter.updateSeries(title, description, seriesId);

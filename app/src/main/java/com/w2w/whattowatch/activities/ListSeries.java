@@ -27,12 +27,13 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_series);
         // This might end up being unnecessary
+        // TODO: Check if we can delete it.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         // Series list management
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
+        // Show all the series
         mList = (ListView) findViewById(R.id.series_list);
         mList.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -67,13 +68,9 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.create_new_series:
                 create();
-                list();
                 return true;
             default:
                 break;
@@ -88,7 +85,6 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-
         menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.edit_series);
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
     }
@@ -118,6 +114,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        // Refresh series list
         list();
     }
 
@@ -155,7 +152,6 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
      *
      * @param elementId id of the series that will be edited
      */
-    // TODO: This method creates another note instead of editing it
     public void edit(long elementId) {
         Intent i = new Intent(this, EditSeries.class);
         i.putExtra(DbAdapter.SERIES_KEY_ID, elementId);
