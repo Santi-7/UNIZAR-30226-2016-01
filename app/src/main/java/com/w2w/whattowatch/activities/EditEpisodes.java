@@ -12,6 +12,8 @@ import android.widget.EditText;
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
 
+import java.util.InputMismatchException;
+
 public class EditEpisodes extends AppCompatActivity implements EditInterface {
 
     private EditText nameField;     // Name text field
@@ -28,7 +30,6 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         // Database adapter.
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
-        // TODO: Title doesn't work. There is no title. Fix it
         setContentView(R.layout.activity_edit_episodes);
         setTitle(R.string.edit_episode);
         // TODO: Check if we can delete it.
@@ -53,9 +54,9 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-            setResult(RESULT_OK);
-            //checkAndFinish();
-            finish();
+                setResult(RESULT_OK);
+                //checkAndFinish();
+                finish();
             }
 
         });
@@ -104,16 +105,13 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
      * Saves all user inputs to the database as an episode
      */
     public void saveState() {
-        //String title = titleField.getText().toString();
-        //String description = descField.getText().toString();
-        String name = null;
+        String name = name = nameField.getText().toString();
         int season = 0, number = 0;
         try {
-            name = nameField.getText().toString();
             season = Integer.parseInt(seasonField.getText().toString());
             number = Integer.parseInt(numberField.getText().toString());
         }
-        catch(Exception e) {
+        catch (InputMismatchException e) {
             //Log.d("SAVESTATE FAIL", episodeId+"");
             //Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
             //        .setAction("Action", null).show();
@@ -127,9 +125,7 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         }
         // The episode has already been created.
         else {
-            if (!dBAdapter.updateEpisode(name, season, number, seriesId, episodeId)) {
-                Log.d("ERROR", "Failed to update series");
-            }
+            dBAdapter.updateEpisode(name, season, number, episodeId);
         }
     }
 

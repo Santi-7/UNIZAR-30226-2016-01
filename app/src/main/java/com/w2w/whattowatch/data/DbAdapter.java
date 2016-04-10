@@ -198,21 +198,18 @@ public class DbAdapter {
      *             season > 0
      * @param number of the updated episode.
      *             number > 0
-     * @param series the updated episode belongs to.
-     *             series > 0
      * @param episodeId of the episode that will be updated.
      *             episodeId > 0
      * @return true if and only if the episode was updated correctly.
      */
-    public boolean updateEpisode(String name, int season, int number, long series, long episodeId) {
-        if (name == null || season <= 0 || number <= 0 || series <= 0 || episodeId <= 0) {
+    public boolean updateEpisode(String name, int season, int number, long episodeId) {
+        if (name == null || season <= 0 || number <= 0 || episodeId <= 0) {
             return false;
         }
         ContentValues args = new ContentValues();
         args.put(EPISODE_KEY_NAME, name);
         args.put(EPISODE_KEY_SEASON_NUM, season);
         args.put(EPISODE_KEY_EPISODE_NUM, number);
-        args.put(EPISODE_KEY_SERIES, series);
         return sDb.update(DATABASE_EPISODES_TABLE, args,
                 EPISODE_KEY_ID + "=" + episodeId, null) > 0;
     }
