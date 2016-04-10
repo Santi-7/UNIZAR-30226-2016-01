@@ -12,11 +12,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -24,10 +26,6 @@ import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
 
 public class ListEpisodes extends AppCompatActivity implements ListInterface {
-
-    /* Constants to create or edit a episode in the activity created. */
-    private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_EDIT = 1;
 
     private DbAdapter mDbAdapter;
     private long seriesId;
@@ -64,6 +62,70 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         Log.d("ListEpisodes: ", "Started for series: " + seriesId);
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
+        list();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_list_episodes, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.create_new_episode) {
+            create();
+            list();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Method that creates an options menu when a user clicks and holds on a series
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.edit_series);
+        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
+    }
+
+    /**
+     * Method called when a contextmenu option is selected
+     */
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case DELETE_ID:
+                AdapterView.AdapterContextMenuInfo info =
+                        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                delete(info.id);
+                return true;
+            case EDIT_ID:
+                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                edit(info.id);
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    /**
+     * Method that runs when an activity returns (for now just list again after editing)
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         list();
     }
 
@@ -130,39 +192,6 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         if (mDbAdapter.deleteEpisode(elementId)) {
             list();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_episodes, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.create_new_episode) {
-            create();
-            list();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Method that runs when an activity returns (for now just list again after editing)
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        list();
     }
 
     /**

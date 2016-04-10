@@ -19,14 +19,6 @@ import com.w2w.whattowatch.data.DbAdapter;
 
 public class ListSeries extends AppCompatActivity implements ListInterface {
 
-    /* Constants to create or edit a series in the activity created. */
-    private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_EDIT = 1;
-
-    /* Constants for the context menu*/
-    private static final int EDIT_ID = Menu.FIRST;
-    private static final int DELETE_ID = Menu.FIRST + 1;
-
     private DbAdapter mDbAdapter; // Database adapter
     private ListView mList;       // View that holds all the series in the UI
 
@@ -86,10 +78,8 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
             default:
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     /**
      * Method that creates an options menu when a user clicks and holds on a series
@@ -110,17 +100,25 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case DELETE_ID:
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                AdapterView.AdapterContextMenuInfo info =
+                        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 delete(info.id);
-                list();
                 return true;
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 edit(info.id);
                 return true;
         }
-        list();
         return super.onContextItemSelected(item);
+    }
+
+    /**
+     * Method that runs when an activity returns (for now just list again after editing)
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        list();
     }
 
     /**
@@ -174,14 +172,5 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         if (mDbAdapter.deleteSeries(elementId)) {
             list();
         }
-    }
-
-    /**
-     * Method that runs when an activity returns (for now just list again after editing)
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        list();
     }
 }
