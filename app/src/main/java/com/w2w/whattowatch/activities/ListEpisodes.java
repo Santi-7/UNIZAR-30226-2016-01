@@ -39,7 +39,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      * If this becomes too memory intensive, it may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private SeasonPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -153,7 +153,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         }
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+        mSectionsPagerAdapter = new SeasonPagerAdapter(getSupportFragmentManager(),
                 numOfSeasons + 1, seriesId);
 
         // Set up the ViewPager with the sections adapter.
@@ -209,25 +209,27 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
     ////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * A placeholder fragment containing a simple view.
+     * Fragment containing all episodes that correspond to the same season of a given
+     * series.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class SeasonFragment extends Fragment {
 
         /**
-         * The fragment argument representing the section number for this fragment.
+         * These arguments can only be passed via bundle. They match to season number and series Id.
          */
         private static final String ARG_SEASON_NUMBER = "section_number";
         private static final String ARG_SERIES_ID = "series_id";
 
         private DbAdapter mDbAdapter;
 
-        public PlaceholderFragment() { }
+        public SeasonFragment() {
+        }
 
         /**
-         * Returns a new instance of this fragment for the given section number.
+         * Returns a new instance of this fragment for the given season.
          */
-        public static PlaceholderFragment newInstance(int seasonNumber, long seriesId) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static SeasonFragment newInstance(int seasonNumber, long seriesId) {
+            SeasonFragment fragment = new SeasonFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SEASON_NUMBER, seasonNumber);
             args.putLong(ARG_SERIES_ID, seriesId);
@@ -235,6 +237,14 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
             return fragment;
         }
 
+        /**
+         * Fetches and shows all episodes on this fragment
+         *
+         * @param inflater           to instantiate the season view
+         * @param container          to match the tabs (internal to android)
+         * @param savedInstanceState argument container, since this class' constructor can't have
+         *                           parameters
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -263,13 +273,13 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
+     * one of the seasons.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SeasonPagerAdapter extends FragmentPagerAdapter {
         private int numberOfSeasons;
         private long seriesId;
 
-        public SectionsPagerAdapter(FragmentManager fm, int seasons, long seriesId) {
+        public SeasonPagerAdapter(FragmentManager fm, int seasons, long seriesId) {
             super(fm);
             numberOfSeasons = seasons;
             this.seriesId = seriesId;
@@ -279,7 +289,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         public Fragment getItem(int seasonNum) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(seasonNum, seriesId);
+            return SeasonFragment.newInstance(seasonNum, seriesId);
         }
 
         @Override
