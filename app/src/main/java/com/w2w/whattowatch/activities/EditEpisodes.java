@@ -54,9 +54,9 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                setResult(RESULT_OK);
-                //checkAndFinish();
-                finish();
+            setResult(RESULT_OK);
+            //checkAndFinish();
+            finish();
             }
 
         });
@@ -111,7 +111,7 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
             season = Integer.parseInt(seasonField.getText().toString());
             number = Integer.parseInt(numberField.getText().toString());
         }
-        catch (InputMismatchException e) {
+        catch (NumberFormatException e) {
             //Log.d("SAVESTATE FAIL", episodeId+"");
             //Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
             //        .setAction("Action", null).show();
