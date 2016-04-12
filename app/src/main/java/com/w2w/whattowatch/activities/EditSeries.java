@@ -24,7 +24,7 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         // Database adapter.
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
-        // TODO: Title doesn't work. There is no title. Fix it
+
         setContentView(R.layout.activity_edit_series);
         setTitle(R.string.edit_series);
         // If editing, it retrieves series' fields (title and description).
