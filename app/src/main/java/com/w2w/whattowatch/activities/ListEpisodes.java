@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -32,7 +31,6 @@ public class ListEpisodes extends ListAbstract {
 
     private long seriesId;              // Identifier of current Series
     private String seriesTitle;         // Title of current Series
-    private String seriesDescription;   // Description of current Series
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -105,10 +103,7 @@ public class ListEpisodes extends ListAbstract {
         startManagingCursor(series);
         seriesTitle = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_TITLE));
         getSupportActionBar().setTitle(seriesTitle);
-        seriesDescription = series.getString(
-                series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION));
 
-        //Cursor eCursor = mDbAdapter.getNumberOfSeasons(seriesId);
         Cursor eCursor = mDbAdapter.getSeasons(seriesId);
         ArrayList<Integer> seasons = new ArrayList<>();
         eCursor.moveToFirst();
@@ -318,7 +313,7 @@ public class ListEpisodes extends ListAbstract {
             if (position == 0) return "Description";
             else {
                 int season = seasons.get(position - 1);
-                if (season > 10) return "S" + season;
+                if (season >= 10) return "S" + season;
                 else return "S0" + season;
             }
         }
