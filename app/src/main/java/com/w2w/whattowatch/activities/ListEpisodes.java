@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -91,7 +92,11 @@ public class ListEpisodes extends ListAbstract {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        mViewPager.getAdapter().notifyDataSetChanged();
+    }
 
     /////////////////////////////////////// ListInterface ///////////////////////////////////////
 
@@ -115,13 +120,14 @@ public class ListEpisodes extends ListAbstract {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SeasonPagerAdapter(getSupportFragmentManager(),
                 seasons, seriesId);
-
+        mSectionsPagerAdapter.notifyDataSetChanged();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
     }
 
     /**
@@ -183,6 +189,10 @@ public class ListEpisodes extends ListAbstract {
         private static final String ARG_SERIES_ID = "series_id";
         private static final String ARG_SEASONS_ARRAY = "seasons_array";
 
+        private ArrayList<Integer> seasons;
+        private int season = -1;
+        private int tab = -1;
+
         public SeasonFragment() {
         }
 
@@ -213,7 +223,7 @@ public class ListEpisodes extends ListAbstract {
                                  Bundle savedInstanceState) {
             DbAdapter mDbAdapter = new DbAdapter(this.getActivity());
             mDbAdapter.open();
-            int tab = getArguments().getInt(ARG_TAB_NUMBER);
+            tab = getArguments().getInt(ARG_TAB_NUMBER);
             long series = getArguments().getLong(ARG_SERIES_ID);
             Log.d("SEASON TAB", tab + "");
             if (tab == 0) {
@@ -225,7 +235,8 @@ public class ListEpisodes extends ListAbstract {
                 ((TextView) rootView.findViewById(R.id.description)).setText(description);
                 return rootView;
             } else {
-                int season = getArguments().getIntegerArrayList(ARG_SEASONS_ARRAY).get(tab - 1);
+                seasons = getArguments().getIntegerArrayList(ARG_SEASONS_ARRAY);
+                season = seasons.get(tab - 1);
                 View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
                 // Get seriesId and fetch episodes for the season.
                 Cursor episodes = mDbAdapter.fetchSeason(getArguments().getLong(ARG_SERIES_ID),
@@ -286,7 +297,7 @@ public class ListEpisodes extends ListAbstract {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the seasons.
      */
-    public class SeasonPagerAdapter extends FragmentPagerAdapter {
+    public class SeasonPagerAdapter extends FragmentStatePagerAdapter {
         private ArrayList<Integer> seasons;
         private long seriesId;
 
@@ -303,7 +314,18 @@ public class ListEpisodes extends ListAbstract {
             return SeasonFragment.newInstance(seasons, seasonNum, seriesId);
         }
 
+        /**
+         * Forces all fragments to reload on update
+         */
         @Override
+        public int getItemPosition(Object object) {
+            // There are more efficient implementations
+            return POSITION_NONE;
+        }
+
+        /**
+         * @return ammount of tabs in the view
+         */
         public int getCount() {
             return seasons.size() + 1;
         }
