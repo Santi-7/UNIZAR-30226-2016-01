@@ -27,9 +27,9 @@ import com.w2w.whattowatch.data.DbAdapter;
 
 import java.util.ArrayList;
 
-public class ListEpisodes extends AppCompatActivity implements ListInterface {
+public class ListEpisodes extends ListAbstract {
 
-    private DbAdapter mDbAdapter;       // Database adapter
+
     private long seriesId;              // Identifier of current Series
     private String seriesTitle;         // Title of current Series
     private String seriesDescription;   // Description of current Series
@@ -92,45 +92,7 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Method that creates an options menu when a user clicks and holds on a series.
-     */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
 
-        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.edit_series);
-        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
-    }
-
-    /**
-     * Method called when a ContextMenu option is selected.
-     */
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case DELETE_ID:
-                AdapterView.AdapterContextMenuInfo info =
-                        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                delete(info.id);
-                return true;
-            case EDIT_ID:
-                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                edit(info.id);
-                return true;
-        }
-        return super.onContextItemSelected(item);
-    }
-
-    /**
-     * Method that runs when an activity returns (for now just list again after editing).
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        list();
-    }
 
     /////////////////////////////////////// ListInterface ///////////////////////////////////////
 
@@ -307,17 +269,19 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
          */
         @Override
         public boolean onContextItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-                case DELETE_ID:
-                    AdapterView.AdapterContextMenuInfo info =
-                            (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                    ((ListInterface) getActivity()).delete(info.id);
-                    return true;
-                case EDIT_ID:
-                    info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                    ((ListInterface) getActivity()).edit(info.id);
-                    return true;
+            int i = item.getItemId();
+            if(i==DELETE_ID){
+                AdapterView.AdapterContextMenuInfo info =
+                        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                ((ListAbstract) getActivity()).delete(info.id);
+                return true;
             }
+            else if(i==EDIT_ID) {
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                ((ListAbstract) getActivity()).edit(info.id);
+                return true;
+            }
+
             return super.onContextItemSelected(item);
         }
     }

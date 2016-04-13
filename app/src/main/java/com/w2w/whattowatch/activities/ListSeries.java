@@ -17,9 +17,8 @@ import android.widget.SimpleCursorAdapter;
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
 
-public class ListSeries extends AppCompatActivity implements ListInterface {
+public class ListSeries extends ListAbstract {
 
-    private DbAdapter mDbAdapter; // Database adapter
     private ListView mList;       // View that holds all the series in the UI
 
     @Override
@@ -68,45 +67,7 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Method that creates an options menu when a user clicks and holds on a series.
-     */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.edit_series);
-        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
-    }
 
-    /**
-     * Method called when a ContextMenu option is selected.
-     */
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case DELETE_ID:
-                AdapterView.AdapterContextMenuInfo info =
-                        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                delete(info.id);
-                return true;
-            case EDIT_ID:
-                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                edit(info.id);
-                return true;
-        }
-        return super.onContextItemSelected(item);
-    }
-
-    /**
-     * Method that runs when an activity returns (for now just list again after editing).
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        // Refresh series list
-        list();
-    }
 
     /////////////////////////////////////// ListInterface ///////////////////////////////////////
 
@@ -150,10 +111,10 @@ public class ListSeries extends AppCompatActivity implements ListInterface {
     /**
      * Deletes the series elementId.
      *
-     * @param elementId id of the series that will be deleted.
+     * @param elementId id of the episode that will be deleted.
      */
     public void delete(long elementId) {
-        // Series are refreshed if the current series has been correctly deleted.
+        // Episodes are refreshed if the current episode has been correctly deleted.
         if (mDbAdapter.deleteSeries(elementId)) {
             list();
         }
