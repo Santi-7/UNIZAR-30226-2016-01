@@ -12,9 +12,10 @@ import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
 
 /**
- * Created by LorenzoPC on 13/04/2016.
+ * TODO: Add description.
  */
-abstract class ListAbstract extends AppCompatActivity{
+public abstract class ListAbstract extends AppCompatActivity {
+    
     protected DbAdapter mDbAdapter;       // Database adapter
 
     /* Constants to create or edit a episode in the activity created. */
@@ -32,15 +33,16 @@ abstract class ListAbstract extends AppCompatActivity{
     abstract void list();
 
     /**
-     * Starts an activity to create an element corresponding to the class that implements this
-     * interface.
+     * Starts an activity to create an element corresponding to the class that implements
+     * this interface.
      */
     abstract void create();
 
     /**
-     * Starts an activity to edit an element corresponding to the class that implements this
-     * interface.
-     * @param elementId id of the element that will be edited
+     * Starts an activity to edit an element corresponding to the class that implements
+     * this interface.
+     * 
+     * @param elementId id of the element that will be edited.
      */
     abstract void edit(long elementId);
 
@@ -69,15 +71,14 @@ abstract class ListAbstract extends AppCompatActivity{
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int i = item.getItemId();
-        if(i==DELETE_ID){
+        if (i == DELETE_ID) {
             AdapterView.AdapterContextMenuInfo info =
-                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             delete(info.id);
-            System.out.println(info.id);
             return true;
-        }
-        else if(i==EDIT_ID) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        } else if (i == EDIT_ID) {
+            AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             edit(info.id);
             return true;
         }
@@ -85,15 +86,14 @@ abstract class ListAbstract extends AppCompatActivity{
     }
 
     /**
-     * Method that runs when an activity returns (for now just list again after editing).
+     * Method that runs when a child activity ends. It lists again all the elements
+     * contained in the activity since they've just been modified by adding or editing one.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        // Refresh series list
+        // Refresh elements list
         list();
     }
-
-
 
 }
