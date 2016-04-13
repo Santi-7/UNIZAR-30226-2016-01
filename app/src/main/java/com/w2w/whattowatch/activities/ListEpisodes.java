@@ -2,7 +2,6 @@ package com.w2w.whattowatch.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,9 +20,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
+
+import java.util.ArrayList;
 
 public class ListEpisodes extends AppCompatActivity implements ListInterface {
 
@@ -143,18 +145,18 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         seriesDescription = series.getString(
                 series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION));
 
-        Cursor eCursor = mDbAdapter.getNumberOfSeasons(seriesId);
-        int numOfSeasons;
-        try {
-            eCursor.moveToFirst();
-            numOfSeasons = Integer.parseInt(eCursor.getString(0));
-        } catch (CursorIndexOutOfBoundsException f) {
-            numOfSeasons = 0;
+        //Cursor eCursor = mDbAdapter.getNumberOfSeasons(seriesId);
+        Cursor eCursor = mDbAdapter.getSeasons(seriesId);
+        ArrayList<Integer> seasons = new ArrayList<>();
+        eCursor.moveToFirst();
+        for (int i = 0; i < eCursor.getCount(); i++) {
+            seasons.add(eCursor.getInt(eCursor.getColumnIndex(DbAdapter.EPISODE_KEY_SEASON_NUM)));
+            eCursor.moveToNext();
         }
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SeasonPagerAdapter(getSupportFragmentManager(),
-                numOfSeasons + 1, seriesId);
+                seasons, seriesId);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -219,10 +221,9 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         /**
          * These arguments can only be passed via bundle. They match to season number and series Id.
          */
-        private static final String ARG_SEASON_NUMBER = "section_number";
+        private static final String ARG_TAB_NUMBER = "section_number";
         private static final String ARG_SERIES_ID = "series_id";
-
-        private DbAdapter mDbAdapter;
+        private static final String ARG_SEASONS_ARRAY = "seasons_array";
 
         public SeasonFragment() {
         }
@@ -230,10 +231,12 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         /**
          * Returns a new instance of this fragment for the given season.
          */
-        public static SeasonFragment newInstance(int seasonNumber, long seriesId) {
+        public static SeasonFragment newInstance(ArrayList<Integer> seasons, int tabNumber,
+                                                 long seriesId) {
             SeasonFragment fragment = new SeasonFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SEASON_NUMBER, seasonNumber);
+            args.putIntegerArrayList(ARG_SEASONS_ARRAY, seasons);
+            args.putInt(ARG_TAB_NUMBER, tabNumber);
             args.putLong(ARG_SERIES_ID, seriesId);
             fragment.setArguments(args);
             return fragment;
@@ -250,27 +253,41 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            mDbAdapter = new DbAdapter(this.getActivity());
+            DbAdapter mDbAdapter = new DbAdapter(this.getActivity());
             mDbAdapter.open();
-            View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
-            // Get seriesId and fetch episodes for the season.
-            Cursor episodes = mDbAdapter.fetchSeason(getArguments().getLong(ARG_SERIES_ID),
-                                                     getArguments().getInt(ARG_SEASON_NUMBER));
-            getActivity().startManagingCursor(episodes);
-            // Create an array to specify the fields we want to display in the list
-            // (the episode number, and if exists, also the name).
-            String[] from = new String[]
-                    {DbAdapter.EPISODE_KEY_EPISODE_NUM, DbAdapter.EPISODE_KEY_NAME};
-            // and an array of the fields we want to bind those fields to.
-            int[] to = new int[]{R.id.episode_number, R.id.episode_name};
+            int tab = getArguments().getInt(ARG_TAB_NUMBER);
+            long series = getArguments().getLong(ARG_SERIES_ID);
+            Log.d("SEASON TAB", tab + "");
+            if (tab == 0) {
+                View rootView = inflater.inflate(R.layout.fragment_description, container, false);
+                Cursor descriptionCursor = mDbAdapter.fetchSeries(series);
+                getActivity().startManagingCursor(descriptionCursor);
+                String description = descriptionCursor.getString(
+                        descriptionCursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION));
+                ((TextView) rootView.findViewById(R.id.description)).setText(description);
+                return rootView;
+            } else {
+                int season = getArguments().getIntegerArrayList(ARG_SEASONS_ARRAY).get(tab - 1);
+                View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
+                // Get seriesId and fetch episodes for the season.
+                Cursor episodes = mDbAdapter.fetchSeason(getArguments().getLong(ARG_SERIES_ID),
+                        season);
+                getActivity().startManagingCursor(episodes);
+                // Create an array to specify the fields we want to display in the list
+                // (the episode number, and if exists, also the name).
+                String[] from = new String[]
+                        {DbAdapter.EPISODE_KEY_EPISODE_NUM, DbAdapter.EPISODE_KEY_NAME};
+                // and an array of the fields we want to bind those fields to.
+                int[] to = new int[]{R.id.episode_number, R.id.episode_name};
 
-            // Now create an array adapter and set it to display using our row.
-            SimpleCursorAdapter adapter =  new SimpleCursorAdapter(
-                    this.getActivity(), R.layout.episode_row, episodes, from, to, 0);
-            ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
-            episodeList.setAdapter(adapter);
-            registerForContextMenu(episodeList);
-            return rootView;
+                // Now create an array adapter and set it to display using our row.
+                SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                        this.getActivity(), R.layout.episode_row, episodes, from, to, 0);
+                ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
+                episodeList.setAdapter(adapter);
+                registerForContextMenu(episodeList);
+                return rootView;
+            }
         }
 
         /**
@@ -310,12 +327,12 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
      * one of the seasons.
      */
     public class SeasonPagerAdapter extends FragmentPagerAdapter {
-        private int numberOfSeasons;
+        private ArrayList<Integer> seasons;
         private long seriesId;
 
-        public SeasonPagerAdapter(FragmentManager fm, int seasons, long seriesId) {
+        public SeasonPagerAdapter(FragmentManager fm, ArrayList<Integer> seasons, long seriesId) {
             super(fm);
-            numberOfSeasons = seasons;
+            this.seasons = seasons;
             this.seriesId = seriesId;
         }
 
@@ -323,18 +340,22 @@ public class ListEpisodes extends AppCompatActivity implements ListInterface {
         public Fragment getItem(int seasonNum) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return SeasonFragment.newInstance(seasonNum, seriesId);
+            return SeasonFragment.newInstance(seasons, seasonNum, seriesId);
         }
 
         @Override
         public int getCount() {
-            return numberOfSeasons;
+            return seasons.size() + 1;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (position > 10) return "S" + position;
-            else return "S0" + position;
+            if (position == 0) return "Description";
+            else {
+                int season = seasons.get(position - 1);
+                if (season > 10) return "S" + season;
+                else return "S0" + season;
+            }
         }
     }
 }
