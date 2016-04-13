@@ -199,7 +199,7 @@ public class DbAdapter {
     }
 
     /**
-     * TODO: Add description.
+     * Updates the information of an episode [episodeId]
      * 
      * @param name of the updated episode.
      *             name != null
@@ -280,7 +280,7 @@ public class DbAdapter {
     }
 
     /**
-     * TODO: Add comment this.
+     * Returns a cursor to an especific season of a series.
      */
     public Cursor fetchSeason(long series, int season) {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +

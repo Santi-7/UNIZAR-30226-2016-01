@@ -17,13 +17,18 @@ abstract class EditAbstract extends AppCompatActivity {
      */
     abstract void populateFields();
 
-
+    /**
+     * Saves state when programs is paused
+     */
     @Override
     protected void onPause() {
         super.onPause();
         saveState();
     }
 
+    /**
+     * Restores state
+     */
     @Override
     protected void onResume() {
         super.onResume();

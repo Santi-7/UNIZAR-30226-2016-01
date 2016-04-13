@@ -12,7 +12,8 @@ import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
 
 /**
- * TODO: Add description.
+ * Abstract class that implements some methods and defines others to be implemented by
+ * the classes ListSeries and ListEpisodes
  */
 public abstract class ListAbstract extends AppCompatActivity {
     
