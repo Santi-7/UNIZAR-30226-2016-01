@@ -259,9 +259,10 @@ public class DbAdapter {
      * @param series series which number of seasons will be returned
      * @return number of seasons of series
      */
-    public Cursor getNumberOfSeasons(long series){
-        String query = "SELECT COUNT(DISTINCT " + EPISODE_KEY_SEASON_NUM + ") as seasons FROM " +
-                        DATABASE_EPISODES_TABLE +   " WHERE " + EPISODE_KEY_SERIES + " = " + series;
+    public Cursor getSeasons(long series) {
+        String query = "SELECT DISTINCT " + EPISODE_KEY_SEASON_NUM + " FROM " +
+                DATABASE_EPISODES_TABLE + " WHERE " + EPISODE_KEY_SERIES + " = " + series
+                + " ORDER BY " + EPISODE_KEY_SEASON_NUM;
         return sDb.rawQuery(query, null);
     }
 
@@ -271,6 +272,16 @@ public class DbAdapter {
                 " = " + season +  " ORDER BY " + EPISODE_KEY_SEASON_NUM + ", " +
                 EPISODE_KEY_EPISODE_NUM;
         return sDb.rawQuery(query, null);
+    }
+
+    /**
+     * Returns true if at least an episode of the series has that season.
+     *
+     * @param series that would contain the season
+     * @param season that would be contained in the series
+     */
+    public boolean existsSeason(long series, int season) {
+        return fetchSeason(series, season) != null;
     }
 
     /**
