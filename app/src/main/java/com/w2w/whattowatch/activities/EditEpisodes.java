@@ -14,7 +14,7 @@ import com.w2w.whattowatch.data.DbAdapter;
 
 import java.util.InputMismatchException;
 
-public class EditEpisodes extends AppCompatActivity implements EditInterface {
+public class EditEpisodes extends EditAbstract {
 
     private EditText nameField;     // Name text field
     private EditText seasonField;   // Season number text field
@@ -89,17 +89,7 @@ public class EditEpisodes extends AppCompatActivity implements EditInterface {
         outState.putSerializable(DbAdapter.EPISODE_KEY_ID, episodeId);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        populateFields();
-    }
 
     /**
      * Saves all user inputs to the database as an episode.

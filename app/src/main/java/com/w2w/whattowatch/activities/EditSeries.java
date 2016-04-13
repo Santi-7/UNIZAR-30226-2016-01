@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
 
-public class EditSeries extends AppCompatActivity implements EditInterface {
+public class EditSeries extends EditAbstract {
 
     private EditText titleField; // Title text field
     private EditText descField;  // Description text field
@@ -58,17 +58,7 @@ public class EditSeries extends AppCompatActivity implements EditInterface {
         outState.putSerializable(DbAdapter.SERIES_KEY_ID, seriesId);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        populateFields();
-    }
 
     /**
      * Saves all user inputs to the database as a series
