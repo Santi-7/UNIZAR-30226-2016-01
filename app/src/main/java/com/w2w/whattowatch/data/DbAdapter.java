@@ -61,13 +61,14 @@ public class DbAdapter {
      * Constructor - The context is needed to retrieve/create the database
      * @param ctx Application context from which to retrieve/create the database
      */
-    public DbAdapter(Context ctx){
+    public DbAdapter(Context ctx) {
         this.ctx = ctx;
     }
 
     /**
      * Retrieves the series database. If it's never been created it creates it.
      * If it can't be created an exception will be thrown.
+     * 
      * @return this DbAdapter // TODO: Check this is correct, do we need this return?
      */
     public DbAdapter open() {
@@ -90,6 +91,7 @@ public class DbAdapter {
 
     /**
      * Creates a new series in the database.
+     * 
      * @param title of the series to be created.
      *              title != null and title.length() > 0
      * @param description of the series to be created.
@@ -108,6 +110,7 @@ public class DbAdapter {
 
     /**
      * Updates the title and description of an existing series.
+     * 
      * @param title new title for the series.
      *              title != null and title.length() > 0
      * @param description of the series to be created.
@@ -128,6 +131,7 @@ public class DbAdapter {
 
     /**
      * Deletes the series [seriesId] from the database.
+     * 
      * @param seriesId id of the series that will be deleted.
      *                 seriesId > 0
      * @return true if and only if the series could be deleted.
@@ -139,6 +143,7 @@ public class DbAdapter {
 
     /**
      * Retrieves the series [seriesId] from the database.
+     * 
      * @param seriesId id of the series to be retrieved.
      * @return Cursor positioned at the series with id [seriesId]
      * @throws SQLException if series could not be found/retrieved
@@ -156,6 +161,7 @@ public class DbAdapter {
 
     /**
      * Retrieves all series from the database.
+     * 
      * @return Cursor positioned at the head of all the series in the database.
      */
     public Cursor fetchAllSeries() {
@@ -169,6 +175,7 @@ public class DbAdapter {
 
     /**
      * Creates a new episodes in the database.
+     * 
      * @param name of the new episode.
      *             name != null
      * @param season of the new episode.
@@ -192,6 +199,8 @@ public class DbAdapter {
     }
 
     /**
+     * TODO: Add description.
+     * 
      * @param name of the updated episode.
      *             name != null
      * @param season of the updated episode.
@@ -216,6 +225,7 @@ public class DbAdapter {
 
     /**
      * Deletes the episode [episodeId] from the database.
+     * 
      * @param episodeId id of the episode that will be deleted.
      *                  episodeId > 0
      * @return true if and only if the episode could be deleted from the database.
@@ -227,6 +237,7 @@ public class DbAdapter {
 
     /**
      * Retrieves the episode [episodeId] from the database.
+     * 
      * @param episodeId id of the episode to be retrieved.
      * @return Cursor positioned at the episode with id [episodeId]
      */
@@ -244,6 +255,7 @@ public class DbAdapter {
 
     /**
      * Retrieves all the episodes of a series from the database.
+     * 
      * @param series id of the series which episodes will be returned
      * @return Cursor positioned at the head of all the episodes of the series in the database.
      */
@@ -255,7 +267,8 @@ public class DbAdapter {
     }
 
     /**
-     * Get the number of seasons of a series
+     * Get the number of seasons of a series.
+     * 
      * @param series series which number of seasons will be returned
      * @return number of seasons of series
      */
@@ -266,11 +279,13 @@ public class DbAdapter {
         return sDb.rawQuery(query, null);
     }
 
-    public Cursor fetchSeason(long series, int season){
+    /**
+     * TODO: Add comment this.
+     */
+    public Cursor fetchSeason(long series, int season) {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
                 " WHERE " + EPISODE_KEY_SERIES + " = " + series + " AND " + EPISODE_KEY_SEASON_NUM +
-                " = " + season +  " ORDER BY " + EPISODE_KEY_SEASON_NUM + ", " +
-                EPISODE_KEY_EPISODE_NUM;
+                " = " + season + " ORDER BY " + EPISODE_KEY_EPISODE_NUM;
         return sDb.rawQuery(query, null);
     }
 
@@ -300,6 +315,7 @@ public class DbAdapter {
 
         /**
          * Creates both the series table and the episode table in the database.
+         * 
          * @param db database where the tables will be created.
          */
         @Override
@@ -312,6 +328,8 @@ public class DbAdapter {
 
         /**
          * Drops all tables and re creates them.
+         * 
+         * TODO: Add description params.
          */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
