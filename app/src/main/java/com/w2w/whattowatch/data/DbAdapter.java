@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Database adapter. Contains methods for adding, modifying and removing series and episodes from
@@ -67,8 +68,8 @@ public class DbAdapter {
     /**
      * Retrieves the series database. If it's never been created it creates it.
      * If it can't be created an exception will be thrown.
-     * 
-     * @return this DbAdapter // TODO: Check this is correct, do we need this return?
+     *
+     * @return this DbAdapter
      */
     public DbAdapter open() {
         sDbHelper = new SeriesDatabaseHelper(ctx);
@@ -257,7 +258,6 @@ public class DbAdapter {
      * 
      * @param series id of the series which episodes will be returned
      * @return Cursor positioned at the head of all the episodes of the series in the database.
-     * TODO: Check if delete it
      */
     public Cursor fetchAllEpisodes(long series) {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
@@ -294,7 +294,6 @@ public class DbAdapter {
      *
      * @param series that would contain the season
      * @param season that would be contained in the series
-     * TODO: Check if delete it
      */
     public boolean existsSeason(long series, int season) {
         return fetchSeason(series, season) != null;
@@ -327,11 +326,15 @@ public class DbAdapter {
 
         /**
          * Drops all tables and re creates them.
-         * 
-         * TODO: Add description params.
+         *
+         * @param db database which tables will be dropped and recreated
+         * @param newVersion the database's new version. It's just an ID for future updates
+         * @param oldVersion the database's old version.
          */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Log.w(this.getClass().toString(), "Upgrading database from version " + oldVersion +
+                    " to " + newVersion + ", will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_SERIES_TABLE );
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_EPISODES_TABLE );
             onCreate(db);
