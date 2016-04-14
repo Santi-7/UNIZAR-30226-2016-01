@@ -68,6 +68,8 @@ public class EditEpisodes extends EditAbstract {
      */
     public void saveState() {
         String name = nameField.getText().toString();
+        // Initial value to 0, because if parseInt fails, create and update Episode
+        // will reject the query with a zero value.
         int season = 0, number = 0;
         try {
             season = Integer.parseInt(seasonField.getText().toString());

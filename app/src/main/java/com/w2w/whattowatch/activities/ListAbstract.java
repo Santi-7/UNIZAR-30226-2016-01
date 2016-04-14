@@ -17,13 +17,15 @@ import com.w2w.whattowatch.data.DbAdapter;
  */
 public abstract class ListAbstract extends AppCompatActivity {
 
-    /* Constants for the context menu*/
+    /* Constants for the context menu. */
     protected static int EDIT_ID = Menu.FIRST;
     protected static int DELETE_ID = Menu.FIRST + 1;
-    protected DbAdapter mDbAdapter;       // Database adapter
+
     /* Constants to create or edit an element in the activity created. */
     protected int ACTIVITY_CREATE = 0;
     protected int ACTIVITY_EDIT = 1;
+
+    protected DbAdapter mDbAdapter;       // Database adapter
 
     /**
      * Fetches and shows the elements corresponding to the class that implements this
