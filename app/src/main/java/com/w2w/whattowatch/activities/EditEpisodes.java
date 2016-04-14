@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,7 +81,6 @@ public class EditEpisodes extends EditAbstract {
             number = Integer.parseInt(numberField.getText().toString());
         }
         catch (NumberFormatException e) {
-            //Log.d("SAVESTATE FAIL", episodeId+"");
             //Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
             //        .setAction("Action", null).show();
         }

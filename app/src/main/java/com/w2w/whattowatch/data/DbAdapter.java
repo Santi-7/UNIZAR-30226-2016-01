@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * Database adapter. Contains methods for adding, modifying and removing series and episodes from
@@ -320,9 +319,7 @@ public class DbAdapter {
          */
         @Override
         public void onCreate(SQLiteDatabase db) {
-            Log.d("DB", CREATE_SERIES_TABLE);
             db.execSQL(CREATE_SERIES_TABLE);
-            Log.d("DB", CREATE_EPISODE_TABLE);
             db.execSQL(CREATE_EPISODE_TABLE);
         }
 
@@ -333,8 +330,6 @@ public class DbAdapter {
          */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(this.getClass().toString(), "Upgrading database from version " + oldVersion +
-                    " to " + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_SERIES_TABLE );
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_EPISODES_TABLE );
             onCreate(db);

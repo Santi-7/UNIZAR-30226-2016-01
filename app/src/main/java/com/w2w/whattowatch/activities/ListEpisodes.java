@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,7 +59,6 @@ public class ListEpisodes extends ListAbstract {
         } catch (NullPointerException e) {
             seriesId = 0;
         }
-        Log.d("ListEpisodes: ", "Started for series: " + seriesId);
         mDbAdapter = new DbAdapter(this);
         mDbAdapter.open();
         list();
@@ -134,7 +132,6 @@ public class ListEpisodes extends ListAbstract {
      * Starts an activity to create a new episode.
      */
     public void create() {
-        Log.d("ListEpisodes", "Create new episode");
         Intent i = new Intent(this, EditEpisodes.class);
         i.putExtra(DbAdapter.EPISODE_KEY_ID, Long.valueOf(0));
         i.putExtra(DbAdapter.EPISODE_KEY_SERIES, seriesId);
@@ -225,7 +222,6 @@ public class ListEpisodes extends ListAbstract {
             mDbAdapter.open();
             tab = getArguments().getInt(ARG_TAB_NUMBER);
             long series = getArguments().getLong(ARG_SERIES_ID);
-            Log.d("SEASON TAB", tab + "");
             if (tab == 0) {
                 View rootView = inflater.inflate(R.layout.fragment_description, container, false);
                 Cursor descriptionCursor = mDbAdapter.fetchSeries(series);

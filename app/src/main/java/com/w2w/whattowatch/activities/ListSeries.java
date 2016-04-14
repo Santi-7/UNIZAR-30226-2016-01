@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -92,7 +91,6 @@ public class ListSeries extends ListAbstract {
      * Starts an activity to create a new series.
      */
     public void create() {
-        Log.d("ListSeries", "Create new series");
         Intent i = new Intent(this, EditSeries.class);
         startActivityForResult(i, ACTIVITY_CREATE);
     }
