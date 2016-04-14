@@ -2,7 +2,6 @@ package com.w2w.whattowatch.activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +23,6 @@ public class EditSeries extends EditAbstract {
         // Database adapter.
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
-
         setContentView(R.layout.activity_edit_series);
         setTitle(R.string.edit_series);
         // If editing, it retrieves series' fields (title and description).
@@ -58,7 +56,7 @@ public class EditSeries extends EditAbstract {
         outState.putSerializable(DbAdapter.SERIES_KEY_ID, seriesId);
     }
 
-
+    /////////////////////////////////////// EditAbstract ///////////////////////////////////////
 
     /**
      * Saves all user inputs to the database as a series
@@ -72,9 +70,11 @@ public class EditSeries extends EditAbstract {
             long idTmp = dBAdapter.createSeries(title, description);
             // The series has been correctly created.
             if (idTmp > 0) seriesId = idTmp;
+            // TODO: else: Show pop-up
         // The series has already been created.
         } else {
             dBAdapter.updateSeries(title, description, seriesId);
+            // TODO: update = false: Show pop-up
         }
     }
 

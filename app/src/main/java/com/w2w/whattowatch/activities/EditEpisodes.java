@@ -2,7 +2,6 @@ package com.w2w.whattowatch.activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +9,6 @@ import android.widget.EditText;
 
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
-
-import java.util.InputMismatchException;
 
 public class EditEpisodes extends EditAbstract {
 
@@ -31,7 +28,6 @@ public class EditEpisodes extends EditAbstract {
         dBAdapter.open();
         setContentView(R.layout.activity_edit_episodes);
         setTitle(R.string.edit_episode);
-        // TODO: Check if we can delete it.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // If editing, it retrieves series' fields (name, seasonNumber and episodeNumber).
@@ -51,13 +47,10 @@ public class EditEpisodes extends EditAbstract {
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View view) {
-            setResult(RESULT_OK);
-            //checkAndFinish();
-            finish();
+                setResult(RESULT_OK);
+                finish();
             }
-
         });
     }
 
@@ -68,7 +61,7 @@ public class EditEpisodes extends EditAbstract {
         outState.putSerializable(DbAdapter.EPISODE_KEY_ID, episodeId);
     }
 
-
+    /////////////////////////////////////// EditAbstract ///////////////////////////////////////
 
     /**
      * Saves all user inputs to the database as an episode.
@@ -80,20 +73,20 @@ public class EditEpisodes extends EditAbstract {
             season = Integer.parseInt(seasonField.getText().toString());
             number = Integer.parseInt(numberField.getText().toString());
         }
-        catch (NumberFormatException e) {
-            //Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
-            //        .setAction("Action", null).show();
-        }
+        // Season or number aren't numbers. Database will reject the query.
+        catch (NumberFormatException e) { }
         // The episode hasn't been yet created.
         if (episodeId == null) {
             // If fields are incorrect, [create] will return negative value.
             long idTmp = dBAdapter.createEpisode(name, season, number, seriesId);
             // The episode has been correctly created.
             if (idTmp > 0) episodeId = idTmp;
+            // TODO: else: Show pop-up
         }
         // The episode has already been created.
         else {
             dBAdapter.updateEpisode(name, season, number, episodeId);
+            // TODO: update = false: Show pop-up
         }
     }
 

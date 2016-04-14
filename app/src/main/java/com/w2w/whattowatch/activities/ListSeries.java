@@ -3,9 +3,7 @@ package com.w2w.whattowatch.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,9 +64,7 @@ public class ListSeries extends ListAbstract {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    /////////////////////////////////////// ListInterface ///////////////////////////////////////
+    /////////////////////////////////////// ListAbstract ///////////////////////////////////////
 
     /**
      * Fetches and shows all series from the database.
@@ -120,6 +116,7 @@ public class ListSeries extends ListAbstract {
 
     /**
      * Starts a ListEpisodes activity for the series with id seriesId.
+     *
      * @param seriesId id of the series which info will be displayed on the to-be-started activity.
      */
     private void showSeries(long seriesId) {

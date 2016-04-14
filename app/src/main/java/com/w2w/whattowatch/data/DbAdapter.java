@@ -257,6 +257,7 @@ public class DbAdapter {
      * 
      * @param series id of the series which episodes will be returned
      * @return Cursor positioned at the head of all the episodes of the series in the database.
+     * TODO: Check if delete it
      */
     public Cursor fetchAllEpisodes(long series) {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
@@ -293,6 +294,7 @@ public class DbAdapter {
      *
      * @param series that would contain the season
      * @param season that would be contained in the series
+     * TODO: Check if delete it
      */
     public boolean existsSeason(long series, int season) {
         return fetchSeason(series, season) != null;

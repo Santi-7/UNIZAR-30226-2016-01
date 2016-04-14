@@ -31,13 +31,13 @@ public abstract class ListAbstract extends AppCompatActivity {
      * Fetches and shows the elements corresponding to the class that implements this
      * interface.
      */
-    abstract void list();
+    protected abstract void list();
 
     /**
      * Starts an activity to create an element corresponding to the class that implements
      * this interface.
      */
-    abstract void create();
+    protected abstract void create();
 
     /**
      * Starts an activity to edit an element corresponding to the class that implements
@@ -45,14 +45,14 @@ public abstract class ListAbstract extends AppCompatActivity {
      * 
      * @param elementId id of the element that will be edited.
      */
-    abstract void edit(long elementId);
+    protected abstract void edit(long elementId);
 
     /**
      * Deletes the episode elementId.
      *
      * @param elementId id of the episode that will be deleted.
      */
-    abstract void delete(long elementId);
+    protected abstract void delete(long elementId);
 
 
     /**
@@ -62,6 +62,7 @@ public abstract class ListAbstract extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        // TODO: Check this, "Edit Series" "Delete Series" in abstract?
         menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.edit_series);
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
     }
@@ -72,11 +73,13 @@ public abstract class ListAbstract extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int i = item.getItemId();
+        // User has selected to delete the element.
         if (i == DELETE_ID) {
             AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             delete(info.id);
             return true;
+        // User has selected to edit the element.
         } else if (i == EDIT_ID) {
             AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();

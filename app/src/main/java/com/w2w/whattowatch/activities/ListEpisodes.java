@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 public class ListEpisodes extends ListAbstract {
 
-
     private long seriesId;              // Identifier of current Series
     private String seriesTitle;         // Title of current Series
 
@@ -64,7 +63,6 @@ public class ListEpisodes extends ListAbstract {
         list();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -96,7 +94,7 @@ public class ListEpisodes extends ListAbstract {
         mViewPager.getAdapter().notifyDataSetChanged();
     }
 
-    /////////////////////////////////////// ListInterface ///////////////////////////////////////
+    /////////////////////////////////////// ListAbstract ///////////////////////////////////////
 
     /**
      * Fetches and shows all episodes from the database.
@@ -177,7 +175,7 @@ public class ListEpisodes extends ListAbstract {
      * Fragment containing all episodes that correspond to the same season of a given
      * series.
      */
-    protected static class SeasonFragment extends Fragment {
+    public static class SeasonFragment extends Fragment {
 
         /**
          * These arguments can only be passed via bundle. They match to season number and series Id.
@@ -190,8 +188,7 @@ public class ListEpisodes extends ListAbstract {
         private int season = -1;
         private int tab = -1;
 
-        public SeasonFragment() {
-        }
+        public SeasonFragment() { }
 
         /**
          * Returns a new instance of this fragment for the given season.
@@ -257,6 +254,7 @@ public class ListEpisodes extends ListAbstract {
 
         /**
          * Method that creates an options menu when a user clicks and holds on a series.
+         * TODO: Is this method like ListAbstract?
          */
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v,
@@ -269,18 +267,19 @@ public class ListEpisodes extends ListAbstract {
 
         /**
          * Method called when a ContextMenu option is selected.
+         * TODO: Is this method like ListAbstract?
          */
         @Override
         public boolean onContextItemSelected(MenuItem item) {
             int i = item.getItemId();
-            if(i==DELETE_ID){
+            if (i == DELETE_ID) {
                 AdapterView.AdapterContextMenuInfo info =
                         (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 ((ListAbstract) getActivity()).delete(info.id);
                 return true;
-            }
-            else if(i==EDIT_ID) {
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            } else if (i == EDIT_ID) {
+                AdapterView.AdapterContextMenuInfo info =
+                        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 ((ListAbstract) getActivity()).edit(info.id);
                 return true;
             }
@@ -294,6 +293,8 @@ public class ListEpisodes extends ListAbstract {
      * one of the seasons.
      */
     protected class SeasonPagerAdapter extends FragmentStatePagerAdapter {
+
+        // TODO: Comments.
         private ArrayList<Integer> seasons;
         private long seriesId;
 
@@ -315,19 +316,21 @@ public class ListEpisodes extends ListAbstract {
          */
         @Override
         public int getItemPosition(Object object) {
-            // There are more efficient implementations
+            // There are more efficient implementations.
             return POSITION_NONE;
         }
 
         /**
-         * @return ammount of tabs in the view
+         * @return amount of tabs in the view.
          */
         public int getCount() {
+            // TODO: Why +1? Comment.
             return seasons.size() + 1;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
+            // TODO: Comment
             if (position == 0) return "Description";
             else {
                 int season = seasons.get(position - 1);
