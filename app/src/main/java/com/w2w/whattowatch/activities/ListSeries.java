@@ -69,7 +69,7 @@ public class ListSeries extends ListAbstract {
     /**
      * Fetches and shows all series from the database.
      */
-    public void list() {
+    protected void list() {
         // Get all of the series from the database and create the item list.
         Cursor seriesCursor = mDbAdapter.fetchAllSeries();
         startManagingCursor(seriesCursor);
@@ -86,7 +86,7 @@ public class ListSeries extends ListAbstract {
     /**
      * Starts an activity to create a new series.
      */
-    public void create() {
+    protected void create() {
         Intent i = new Intent(this, EditSeries.class);
         startActivityForResult(i, ACTIVITY_CREATE);
     }
@@ -96,7 +96,7 @@ public class ListSeries extends ListAbstract {
      *
      * @param elementId id of the series that will be edited.
      */
-    public void edit(long elementId) {
+    protected void edit(long elementId) {
         Intent i = new Intent(this, EditSeries.class);
         i.putExtra(DbAdapter.SERIES_KEY_ID, elementId);
         startActivityForResult(i, ACTIVITY_EDIT);
@@ -107,7 +107,7 @@ public class ListSeries extends ListAbstract {
      *
      * @param elementId id of the episode that will be deleted.
      */
-    public void delete(long elementId) {
+    protected void delete(long elementId) {
         // Episodes are refreshed if the current episode has been correctly deleted.
         if (mDbAdapter.deleteSeries(elementId)) {
             list();
@@ -119,7 +119,7 @@ public class ListSeries extends ListAbstract {
      *
      * @param seriesId id of the series which info will be displayed on the to-be-started activity.
      */
-    private void showSeries(long seriesId) {
+    protected void showSeries(long seriesId) {
         Intent intent = new Intent(this, ListEpisodes.class);
         intent.putExtra("sid", seriesId);
         startActivity(intent);

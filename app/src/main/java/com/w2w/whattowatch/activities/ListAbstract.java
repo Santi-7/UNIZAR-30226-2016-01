@@ -19,7 +19,7 @@ public abstract class ListAbstract extends AppCompatActivity {
     
     protected DbAdapter mDbAdapter;       // Database adapter
 
-    /* Constants to create or edit a episode in the activity created. */
+    /* Constants to create or edit an element in the activity created. */
     protected int ACTIVITY_CREATE = 0;
     protected int ACTIVITY_EDIT = 1;
 
