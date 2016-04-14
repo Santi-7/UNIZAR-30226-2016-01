@@ -22,8 +22,7 @@ public class ListSeries extends ListAbstract {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_series);
-        // This might end up being unnecessary
-        // TODO: Check if we can delete it.
+        // The toolbar holds the title of the activity and the menu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Series list management

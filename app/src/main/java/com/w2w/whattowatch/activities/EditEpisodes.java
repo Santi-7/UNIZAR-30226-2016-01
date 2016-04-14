@@ -81,12 +81,10 @@ public class EditEpisodes extends EditAbstract {
             long idTmp = dBAdapter.createEpisode(name, season, number, seriesId);
             // The episode has been correctly created.
             if (idTmp > 0) episodeId = idTmp;
-            // TODO: else: Show pop-up
         }
         // The episode has already been created.
         else {
             dBAdapter.updateEpisode(name, season, number, episodeId);
-            // TODO: update = false: Show pop-up
         }
     }
 

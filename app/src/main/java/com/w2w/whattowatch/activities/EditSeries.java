@@ -70,11 +70,9 @@ public class EditSeries extends EditAbstract {
             long idTmp = dBAdapter.createSeries(title, description);
             // The series has been correctly created.
             if (idTmp > 0) seriesId = idTmp;
-            // TODO: else: Show pop-up
         // The series has already been created.
         } else {
             dBAdapter.updateSeries(title, description, seriesId);
-            // TODO: update = false: Show pop-up
         }
     }
 

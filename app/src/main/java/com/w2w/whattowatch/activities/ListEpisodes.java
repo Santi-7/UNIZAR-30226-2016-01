@@ -254,7 +254,6 @@ public class ListEpisodes extends ListAbstract {
 
         /**
          * Method that creates an options menu when a user clicks and holds on a series.
-         * TODO: Is this method like ListAbstract?
          */
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v,
@@ -267,7 +266,6 @@ public class ListEpisodes extends ListAbstract {
 
         /**
          * Method called when a ContextMenu option is selected.
-         * TODO: Is this method like ListAbstract?
          */
         @Override
         public boolean onContextItemSelected(MenuItem item) {
@@ -294,9 +292,8 @@ public class ListEpisodes extends ListAbstract {
      */
     protected class SeasonPagerAdapter extends FragmentStatePagerAdapter {
 
-        // TODO: Comments.
-        private ArrayList<Integer> seasons;
-        private long seriesId;
+        private ArrayList<Integer> seasons; // Holds all the seasons for the series
+        private long seriesId;              // Id of the series
 
         public SeasonPagerAdapter(FragmentManager fm, ArrayList<Integer> seasons, long seriesId) {
             super(fm);
@@ -324,15 +321,17 @@ public class ListEpisodes extends ListAbstract {
          * @return amount of tabs in the view.
          */
         public int getCount() {
-            // TODO: Why +1? Comment.
+            // Since the description is in the first tab the count is one more
+            // than the number of seasons
             return seasons.size() + 1;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            // TODO: Comment
+            // The first tab holds the description
             if (position == 0) return "Description";
             else {
+                // The title contains the number of the season for the tab
                 int season = seasons.get(position - 1);
                 if (season >= 10) return "S" + season;
                 else return "S0" + season;

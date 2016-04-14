@@ -16,16 +16,14 @@ import com.w2w.whattowatch.data.DbAdapter;
  * the classes ListSeries and ListEpisodes
  */
 public abstract class ListAbstract extends AppCompatActivity {
-    
-    protected DbAdapter mDbAdapter;       // Database adapter
-
-    /* Constants to create or edit an element in the activity created. */
-    protected int ACTIVITY_CREATE = 0;
-    protected int ACTIVITY_EDIT = 1;
 
     /* Constants for the context menu*/
     protected static int EDIT_ID = Menu.FIRST;
     protected static int DELETE_ID = Menu.FIRST + 1;
+    protected DbAdapter mDbAdapter;       // Database adapter
+    /* Constants to create or edit an element in the activity created. */
+    protected int ACTIVITY_CREATE = 0;
+    protected int ACTIVITY_EDIT = 1;
 
     /**
      * Fetches and shows the elements corresponding to the class that implements this
@@ -62,7 +60,6 @@ public abstract class ListAbstract extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        // TODO: Check this, "Edit Series" "Delete Series" in abstract?
         menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.edit_series);
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.delete_series);
     }
