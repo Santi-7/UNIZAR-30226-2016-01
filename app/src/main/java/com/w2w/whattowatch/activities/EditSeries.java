@@ -63,7 +63,7 @@ public class EditSeries extends EditAbstract {
     /**
      * Saves all user inputs to the database as a series
      */
-    public void saveState() {
+    protected void saveState() {
         String title = titleField.getText().toString();
         String description = descField.getText().toString();
         // The series hasn't been yet created.
@@ -81,7 +81,7 @@ public class EditSeries extends EditAbstract {
     /**
      * Fills all user input fields with previously existing information from the database.
      */
-    public void populateFields() {
+    protected void populateFields() {
         if (seriesId != null) {
             Cursor series = dBAdapter.fetchSeries(seriesId);
             startManagingCursor(series);

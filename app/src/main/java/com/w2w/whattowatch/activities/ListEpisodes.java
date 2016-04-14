@@ -101,7 +101,7 @@ public class ListEpisodes extends ListAbstract {
     /**
      * Fetches and shows all episodes from the database.
      */
-    public void list() {
+    protected void list() {
         Cursor series = mDbAdapter.fetchSeries(seriesId);
         startManagingCursor(series);
         seriesTitle = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_TITLE));
@@ -131,7 +131,7 @@ public class ListEpisodes extends ListAbstract {
     /**
      * Starts an activity to create a new episode.
      */
-    public void create() {
+    protected void create() {
         Intent i = new Intent(this, EditEpisodes.class);
         i.putExtra(DbAdapter.EPISODE_KEY_ID, Long.valueOf(0));
         i.putExtra(DbAdapter.EPISODE_KEY_SERIES, seriesId);
@@ -143,7 +143,7 @@ public class ListEpisodes extends ListAbstract {
      *
      * @param elementId id of the episode that will be edited.
      */
-    public void edit(long elementId) {
+    protected void edit(long elementId) {
         Intent i = new Intent(this, EditEpisodes.class);
         i.putExtra(DbAdapter.EPISODE_KEY_SERIES, seriesId);
         i.putExtra(DbAdapter.EPISODE_KEY_ID, elementId);
@@ -155,7 +155,7 @@ public class ListEpisodes extends ListAbstract {
      *
      * @param elementId id of the episode that will be deleted.
      */
-    public void delete(long elementId) {
+    protected void delete(long elementId) {
         // Episodes are refreshed if the current episode has been correctly deleted.
         if (mDbAdapter.deleteEpisode(elementId)) {
             list();
@@ -165,7 +165,7 @@ public class ListEpisodes extends ListAbstract {
     /**
      * Starts an activity to edit the current series (with identifier [seriesId]).
      */
-    public void editSeries() {
+    protected void editSeries() {
         Intent i = new Intent(this, EditSeries.class);
         i.putExtra(DbAdapter.SERIES_KEY_ID, seriesId);
         startActivityForResult(i, ACTIVITY_EDIT);
@@ -177,7 +177,7 @@ public class ListEpisodes extends ListAbstract {
      * Fragment containing all episodes that correspond to the same season of a given
      * series.
      */
-    public static class SeasonFragment extends Fragment {
+    protected static class SeasonFragment extends Fragment {
 
         /**
          * These arguments can only be passed via bundle. They match to season number and series Id.
@@ -196,7 +196,7 @@ public class ListEpisodes extends ListAbstract {
         /**
          * Returns a new instance of this fragment for the given season.
          */
-        public static SeasonFragment newInstance(ArrayList<Integer> seasons, int tabNumber,
+        protected static SeasonFragment newInstance(ArrayList<Integer> seasons, int tabNumber,
                                                  long seriesId) {
             SeasonFragment fragment = new SeasonFragment();
             Bundle args = new Bundle();
@@ -293,7 +293,7 @@ public class ListEpisodes extends ListAbstract {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the seasons.
      */
-    public class SeasonPagerAdapter extends FragmentStatePagerAdapter {
+    protected class SeasonPagerAdapter extends FragmentStatePagerAdapter {
         private ArrayList<Integer> seasons;
         private long seriesId;
 
