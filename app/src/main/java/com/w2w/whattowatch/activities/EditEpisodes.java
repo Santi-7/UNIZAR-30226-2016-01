@@ -62,26 +62,6 @@ public class EditEpisodes extends EditAbstract {
         });
     }
 
-    /*private void checkAndFinish() {
-        boolean error = false;
-        try {
-            nameField.getText().toString();
-            String season = seasonField.getText().toString();
-            String number = numberField.getText().toString();
-            Log.d("READ", season + " " + number);
-        } catch (NullPointerException e) {
-            Log.d("READ", "NULL STUFF " + seasonField + " " + numberField);
-            error = true;
-        }
-        if (error) {
-            Log.d("TODO", " " + nameField + seasonField + numberField);
-            Snackbar.make(findViewById(R.id.layout), "Must fill all fields", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        } else {
-            finish();
-        }
-    }*/
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

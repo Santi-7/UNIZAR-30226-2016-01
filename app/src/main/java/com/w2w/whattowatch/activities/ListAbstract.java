@@ -20,12 +20,12 @@ public abstract class ListAbstract extends AppCompatActivity {
     protected DbAdapter mDbAdapter;       // Database adapter
 
     /* Constants to create or edit a episode in the activity created. */
-    int ACTIVITY_CREATE = 0;
-    int ACTIVITY_EDIT = 1;
+    protected int ACTIVITY_CREATE = 0;
+    protected int ACTIVITY_EDIT = 1;
 
     /* Constants for the context menu*/
-    public static int EDIT_ID = Menu.FIRST;
-    public static int DELETE_ID = Menu.FIRST + 1;
+    protected static int EDIT_ID = Menu.FIRST;
+    protected static int DELETE_ID = Menu.FIRST + 1;
 
     /**
      * Fetches and shows the elements corresponding to the class that implements this
