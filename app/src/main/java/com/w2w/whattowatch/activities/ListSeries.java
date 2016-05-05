@@ -71,23 +71,6 @@ public class ListSeries extends ListAbstract {
     /**
      * Fetches and shows all series from the database.
      */
-    /*protected void list() {
-        // Get all of the series from the database and create the item list.
-        Cursor seriesCursor = mDbAdapter.fetchAllSeries();
-        startManagingCursor(seriesCursor);
-        // Create an array to specify the fields we want to display in the list (only TITLE).
-        String[] from = new String[]{DbAdapter.SERIES_KEY_TITLE};
-        // and an array of the fields we want to bind those fields to (series_title).
-        int[] to = new int[]{R.id.series_title};
-        // Now create an array adapter and set it to display using our row.
-        SimpleCursorAdapter notes =
-                new SimpleCursorAdapter(this, R.layout.series_row, seriesCursor, from, to, 0);
-        mList.setAdapter(notes);
-    }*/
-
-    /**
-     * Fetches and shows all series from the database.
-     */
     protected void list() {
         // Get all of the series from the database and create the item list.
         Cursor seriesCursor = mDbAdapter.fetchAllSeries();
@@ -139,11 +122,19 @@ public class ListSeries extends ListAbstract {
         startActivity(intent);
     }
 
+    /**
+     * Adapter class specific to populate the listView in ListSeries from a cursor.
+     */
     static class CursorAdapterAdapter extends ResourceCursorAdapter {
         public CursorAdapterAdapter(Context context, int layout, Cursor c, int flags) {
             super(context, layout, c, flags);
         }
 
+        /**
+         * Will be automatically called by android to populate the list view.
+         * To do that it extracts the information from the cursor and transforms it to
+         * something usable in the case of the rating images.
+         */
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             TextView titleView = (TextView) view.findViewById(R.id.series_title);
@@ -151,29 +142,28 @@ public class ListSeries extends ListAbstract {
             titleView.setText(series_title);
 
             ImageView image = (ImageView) view.findViewById(R.id.series_score);
-            String score = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_SCORE));
+            String score = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_RATING));
             score = score == null ? "0" : score;
             int score_img = 0;
             switch (score) {
                 case ("0"):
-                    score_img = R.drawable.full_rating;
+                    score_img = R.drawable.none;
                     break;
                 case ("1"):
-                    score_img = R.drawable.full_rating;
+                    score_img = R.drawable.one;
                     break;
                 case ("2"):
-                    score_img = R.drawable.full_rating;
+                    score_img = R.drawable.two;
                     break;
                 case ("3"):
-                    score_img = R.drawable.full_rating;
+                    score_img = R.drawable.three;
                     break;
                 case ("4"):
-                    score_img = R.drawable.full_rating;
+                    score_img = R.drawable.four;
                     break;
                 case ("5"):
-                    score_img = R.drawable.full_rating;
+                    score_img = R.drawable.five;
             }
-            //int resId=context.getResources().getIdentifier(score_img, "drawable", context.getPackageName());
             image.setImageResource(score_img);
         }
     }

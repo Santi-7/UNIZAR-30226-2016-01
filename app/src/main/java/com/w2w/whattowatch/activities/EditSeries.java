@@ -3,8 +3,10 @@ package com.w2w.whattowatch.activities;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
@@ -13,6 +15,7 @@ public class EditSeries extends EditAbstract {
 
     private EditText titleField; // Title text field
     private EditText descField;  // Description text field
+    private Spinner ratingSpinner;// Score that holds all possible scores for a series
     private Long seriesId;       // Series ID, only set when this activity
                                  // is called to edit a series
     private DbAdapter dBAdapter; // Database adapter
@@ -28,6 +31,7 @@ public class EditSeries extends EditAbstract {
         // If editing, it retrieves series' fields (title and description).
         titleField = (EditText) findViewById(R.id.title_field);
         descField = (EditText) findViewById(R.id.description_field);
+        ratingSpinner = (Spinner) findViewById(R.id.score_spinner);
         // Save button.
         Button confirmButton = (Button) findViewById(R.id.save_button);
 
@@ -64,15 +68,19 @@ public class EditSeries extends EditAbstract {
     protected void saveState() {
         String title = titleField.getText().toString();
         String description = descField.getText().toString();
+        String rating;
+        int choice = ratingSpinner.getSelectedItemPosition();
+        rating = choice == 0 ? null : choice + "";
+
         // The series hasn't been yet created.
         if (seriesId == null) {
             // If title or description null, [create] will return negative value.
-            long idTmp = dBAdapter.createSeries(title, description);
+            long idTmp = dBAdapter.createSeries(title, description, rating);
             // The series has been correctly created.
             if (idTmp > 0) seriesId = idTmp;
         // The series has already been created.
         } else {
-            dBAdapter.updateSeries(title, description, seriesId);
+            dBAdapter.updateSeries(title, description, rating, seriesId);
         }
     }
 
@@ -80,6 +88,13 @@ public class EditSeries extends EditAbstract {
      * Fills all user input fields with previously existing information from the database.
      */
     protected void populateFields() {
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.scores_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        ratingSpinner.setAdapter(adapter);
         if (seriesId != null) {
             Cursor series = dBAdapter.fetchSeries(seriesId);
             startManagingCursor(series);
