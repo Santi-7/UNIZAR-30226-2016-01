@@ -232,7 +232,7 @@ public class ListEpisodes extends ListAbstract {
                 season = seasons.get(tab - 1);
                 View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
                 // Get seriesId and fetch episodes for the season.
-                Cursor episodes = mDbAdapter.fetchSeason(getArguments().getLong(ARG_SERIES_ID),
+                Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
                         season);
                 getActivity().startManagingCursor(episodes);
                 // Create an array to specify the fields we want to display in the list
@@ -250,6 +250,9 @@ public class ListEpisodes extends ListAbstract {
                 registerForContextMenu(episodeList);
                 return rootView;
             }
+
+            // TODO: Add an adapter similar to that in ListSeries
+
         }
 
         /**
