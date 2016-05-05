@@ -18,7 +18,7 @@ public class DbAdapter {
     public static final String SERIES_KEY_ID = "_id"; // A series' unique id field
     public static final String SERIES_KEY_TITLE = "title"; // Series title field
     public static final String SERIES_KEY_DESCRIPTION = "description"; // Series description field
-    public static final String SERIES_KEY_SCORE = "score"; // Series score field
+    public static final String SERIES_KEY_RATING = "score"; // Series score field
 
     public static final String EPISODE_KEY_ID = "_id"; // An episode's unique id field
     public static final String EPISODE_KEY_NAME = "name"; // Episode name field
@@ -38,7 +38,7 @@ public class DbAdapter {
             "create table " + DATABASE_SERIES_TABLE +
             " (" + SERIES_KEY_ID + " integer primary key autoincrement, " +
                    SERIES_KEY_TITLE + " text not null, " +
-                   SERIES_KEY_SCORE + " integer, " +
+                    SERIES_KEY_RATING + " integer, " +
                    SERIES_KEY_DESCRIPTION + " text not null);";
 
     /* SQL statement for creating the episode table*/
@@ -98,13 +98,14 @@ public class DbAdapter {
      *              description != null
      * @return id of the newly created series in the database or -1 to indicate error.
      */
-    public long createSeries(String title, String description) {
+    public long createSeries(String title, String description, String rating) {
         if (title == null || title.equals("") || description == null) {
             return -1;
         }
         ContentValues initialValues = new ContentValues();
         initialValues.put(SERIES_KEY_TITLE, title);
         initialValues.put(SERIES_KEY_DESCRIPTION, description);
+        initialValues.put(SERIES_KEY_RATING, rating);
         return sDb.insert(DATABASE_SERIES_TABLE, null, initialValues);
     }
 
@@ -119,13 +120,14 @@ public class DbAdapter {
      *              seriesId > 0
      * @return true if and only if the series title could be updated.
      */
-    public boolean updateSeries(String title, String description, long seriesId) {
+    public boolean updateSeries(String title, String description, String rating, long seriesId) {
         if (title == null || title.equals("") || description == null || seriesId <= 0) {
             return false;
         }
         ContentValues args = new ContentValues();
         args.put(SERIES_KEY_TITLE, title);
         args.put(SERIES_KEY_DESCRIPTION, description);
+        args.put(SERIES_KEY_RATING, rating);
         return sDb.update(DATABASE_SERIES_TABLE, args, SERIES_KEY_ID + "=" + seriesId, null) > 0;
     }
 
@@ -151,7 +153,7 @@ public class DbAdapter {
     public Cursor fetchSeries(long seriesId) throws SQLException {
         Cursor mCursor =
                 sDb.query(true, DATABASE_SERIES_TABLE, new String[]
-                                {SERIES_KEY_ID, SERIES_KEY_TITLE, SERIES_KEY_DESCRIPTION},
+                                {SERIES_KEY_ID, SERIES_KEY_TITLE, SERIES_KEY_DESCRIPTION, SERIES_KEY_RATING},
                           SERIES_KEY_ID + "=" + seriesId, null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -224,6 +226,19 @@ public class DbAdapter {
     }
 
     /**
+     * Changes the state of the episode. From watched to unwatched and vice-versa.
+     *
+     * @param episodeId id of the episode which state will be toggled.
+     */
+    public void toggleWatched(long episodeId) {
+        // Since watched is a boolean value it's not necessary to query the database to change it
+        sDb.execSQL("update " + DATABASE_EPISODES_TABLE + " set " + EPISODE_KEY_WATCHED + " = CASE "
+                + EPISODE_KEY_WATCHED + " when 0 then 1 when 1 then 0 else " +
+                EPISODE_KEY_WATCHED + " end where " + EPISODE_KEY_ID + " = " + episodeId);
+    }
+
+
+    /**
      * Deletes the episode [episodeId] from the database.
      * 
      * @param episodeId id of the episode that will be deleted.
@@ -254,19 +269,6 @@ public class DbAdapter {
     }
 
     /**
-     * Retrieves all the episodes of a series from the database.
-     * 
-     * @param series id of the series which episodes will be returned
-     * @return Cursor positioned at the head of all the episodes of the series in the database.
-     */
-    public Cursor fetchAllEpisodes(long series) {
-        String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
-                       " WHERE " + EPISODE_KEY_SERIES + " = " + series +
-                       " ORDER BY " + EPISODE_KEY_SEASON_NUM + ", " + EPISODE_KEY_EPISODE_NUM;
-        return sDb.rawQuery(query, null);
-    }
-
-    /**
      * Get the number of seasons of a series.
      * 
      * @param series series which number of seasons will be returned
@@ -282,21 +284,11 @@ public class DbAdapter {
     /**
      * Returns a cursor to an especific season of a series.
      */
-    public Cursor fetchSeason(long series, int season) {
+    public Cursor fetchEpisodesFromSeason(long series, int season) {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
                 " WHERE " + EPISODE_KEY_SERIES + " = " + series + " AND " + EPISODE_KEY_SEASON_NUM +
                 " = " + season + " ORDER BY " + EPISODE_KEY_EPISODE_NUM;
         return sDb.rawQuery(query, null);
-    }
-
-    /**
-     * Returns true if at least an episode of the series has that season.
-     *
-     * @param series that would contain the season
-     * @param season that would be contained in the series
-     */
-    public boolean existsSeason(long series, int season) {
-        return fetchSeason(series, season) != null;
     }
 
     /**
