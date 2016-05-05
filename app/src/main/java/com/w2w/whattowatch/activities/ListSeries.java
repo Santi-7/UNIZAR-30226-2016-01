@@ -1,5 +1,6 @@
 package com.w2w.whattowatch.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,8 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.ResourceCursorAdapter;
+import android.widget.TextView;
 
 import com.w2w.whattowatch.R;
 import com.w2w.whattowatch.data.DbAdapter;
@@ -68,7 +71,7 @@ public class ListSeries extends ListAbstract {
     /**
      * Fetches and shows all series from the database.
      */
-    protected void list() {
+    /*protected void list() {
         // Get all of the series from the database and create the item list.
         Cursor seriesCursor = mDbAdapter.fetchAllSeries();
         startManagingCursor(seriesCursor);
@@ -79,6 +82,18 @@ public class ListSeries extends ListAbstract {
         // Now create an array adapter and set it to display using our row.
         SimpleCursorAdapter notes =
                 new SimpleCursorAdapter(this, R.layout.series_row, seriesCursor, from, to, 0);
+        mList.setAdapter(notes);
+    }*/
+
+    /**
+     * Fetches and shows all series from the database.
+     */
+    protected void list() {
+        // Get all of the series from the database and create the item list.
+        Cursor seriesCursor = mDbAdapter.fetchAllSeries();
+        startManagingCursor(seriesCursor);
+        CursorAdapterAdapter notes =
+                new CursorAdapterAdapter(this, R.layout.series_row, seriesCursor, 0);
         mList.setAdapter(notes);
     }
 
@@ -122,5 +137,44 @@ public class ListSeries extends ListAbstract {
         Intent intent = new Intent(this, ListEpisodes.class);
         intent.putExtra("sid", seriesId);
         startActivity(intent);
+    }
+
+    static class CursorAdapterAdapter extends ResourceCursorAdapter {
+        public CursorAdapterAdapter(Context context, int layout, Cursor c, int flags) {
+            super(context, layout, c, flags);
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            TextView titleView = (TextView) view.findViewById(R.id.series_title);
+            String series_title = cursor.getString(cursor.getColumnIndex(DbAdapter.SERIES_KEY_TITLE));
+            titleView.setText(series_title);
+
+            ImageView image = (ImageView) view.findViewById(R.id.series_score);
+            String score = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_SCORE));
+            score = score == null ? "0" : score;
+            int score_img = 0;
+            switch (score) {
+                case ("0"):
+                    score_img = R.drawable.full_rating;
+                    break;
+                case ("1"):
+                    score_img = R.drawable.full_rating;
+                    break;
+                case ("2"):
+                    score_img = R.drawable.full_rating;
+                    break;
+                case ("3"):
+                    score_img = R.drawable.full_rating;
+                    break;
+                case ("4"):
+                    score_img = R.drawable.full_rating;
+                    break;
+                case ("5"):
+                    score_img = R.drawable.full_rating;
+            }
+            //int resId=context.getResources().getIdentifier(score_img, "drawable", context.getPackageName());
+            image.setImageResource(score_img);
+        }
     }
 }
