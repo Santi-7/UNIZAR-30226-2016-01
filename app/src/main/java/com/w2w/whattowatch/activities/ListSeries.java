@@ -75,8 +75,8 @@ public class ListSeries extends ListAbstract {
         // Get all of the series from the database and create the item list.
         Cursor seriesCursor = mDbAdapter.fetchAllSeries();
         startManagingCursor(seriesCursor);
-        CursorAdapterAdapter notes =
-                new CursorAdapterAdapter(this, R.layout.series_row, seriesCursor, 0);
+        SeriesListViewAdapter notes =
+                new SeriesListViewAdapter(this, R.layout.series_row, seriesCursor, 0);
         mList.setAdapter(notes);
     }
 
@@ -125,8 +125,8 @@ public class ListSeries extends ListAbstract {
     /**
      * Adapter class specific to populate the listView in ListSeries from a cursor.
      */
-    static class CursorAdapterAdapter extends ResourceCursorAdapter {
-        public CursorAdapterAdapter(Context context, int layout, Cursor c, int flags) {
+    static class SeriesListViewAdapter extends ResourceCursorAdapter {
+        public SeriesListViewAdapter(Context context, int layout, Cursor c, int flags) {
             super(context, layout, c, flags);
         }
 
