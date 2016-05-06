@@ -233,8 +233,8 @@ public class DbAdapter {
     public void toggleWatched(long episodeId) {
         // Since watched is a boolean value it's not necessary to query the database to change it
         sDb.execSQL("update " + DATABASE_EPISODES_TABLE + " set " + EPISODE_KEY_WATCHED + " = CASE "
-                + EPISODE_KEY_WATCHED + " when 0 then 1 when 1 then 0 else " +
-                EPISODE_KEY_WATCHED + " end where " + EPISODE_KEY_ID + " = " + episodeId);
+                + EPISODE_KEY_WATCHED + " when 0 then 1 when 1 then 0 else 1 end where "
+                + EPISODE_KEY_ID + " = " + episodeId);
     }
 
 
