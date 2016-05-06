@@ -1,5 +1,6 @@
 package com.w2w.whattowatch.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,8 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
 import com.w2w.whattowatch.R;
@@ -188,13 +190,14 @@ public class ListEpisodes extends ListAbstract {
         private int season = -1;
         private int tab = -1;
 
-        public SeasonFragment() { }
+        public SeasonFragment() {
+        }
 
         /**
          * Returns a new instance of this fragment for the given season.
          */
         protected static SeasonFragment newInstance(ArrayList<Integer> seasons, int tabNumber,
-                                                 long seriesId) {
+                                                    long seriesId) {
             SeasonFragment fragment = new SeasonFragment();
             Bundle args = new Bundle();
             args.putIntegerArrayList(ARG_SEASONS_ARRAY, seasons);
@@ -235,24 +238,29 @@ public class ListEpisodes extends ListAbstract {
                 Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
                         season);
                 getActivity().startManagingCursor(episodes);
-                // Create an array to specify the fields we want to display in the list
-                // (the episode number, and if exists, also the name).
-                String[] from = new String[]
-                        {DbAdapter.EPISODE_KEY_EPISODE_NUM, DbAdapter.EPISODE_KEY_NAME};
-                // and an array of the fields we want to bind those fields to.
-                int[] to = new int[]{R.id.episode_number, R.id.episode_name};
-
-                // Now create an array adapter and set it to display using our row.
-                SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                        this.getActivity(), R.layout.episode_row, episodes, from, to, 0);
+                EpisodeListViewAdapter adapter = new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes, 0);
                 ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
                 episodeList.setAdapter(adapter);
                 registerForContextMenu(episodeList);
+                ImageView watched = (ImageView) episodeList.findViewById(R.id.episode_watched);
+                episodeList.setOnItemClickListener(
+                        new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                toggleWatched(id);
+                            }
+                        });
                 return rootView;
             }
 
             // TODO: Add an adapter similar to that in ListSeries
 
+        }
+
+        private void toggleWatched(long episodeId) {
+            DbAdapter mDbAdapter = new DbAdapter(this.getActivity());
+            mDbAdapter.open();
+            mDbAdapter.toggleWatched(episodeId);
         }
 
         /**
@@ -286,6 +294,45 @@ public class ListEpisodes extends ListAbstract {
             }
 
             return super.onContextItemSelected(item);
+        }
+
+        /**
+         * Adapter class specific to populate the listView in ListSeries from a cursor.
+         */
+        static class EpisodeListViewAdapter extends ResourceCursorAdapter {
+            public EpisodeListViewAdapter(Context context, int layout, Cursor c, int flags) {
+                super(context, layout, c, flags);
+            }
+
+            /**
+             * Will be automatically called by android to populate the list view.
+             * To do that it extracts the information from the cursor and transforms it to
+             * something usable in the case of the rating images.
+             */
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
+                TextView numberView = (TextView) view.findViewById(R.id.episode_number);
+                String episode_number = cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_EPISODE_NUM));
+                numberView.setText(episode_number);
+
+                TextView nameView = (TextView) view.findViewById(R.id.episode_name);
+                String episode_name = cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_NAME));
+                nameView.setText(episode_name);
+
+                ImageView image = (ImageView) view.findViewById(R.id.episode_watched);
+                String wasWatched = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.EPISODE_KEY_WATCHED));
+                wasWatched = wasWatched == null ? "0" : wasWatched;
+                int watched_img = 0;
+                switch (wasWatched) {
+                    case ("0"):
+                        watched_img = R.drawable.unwatched;
+                        break;
+                    case ("1"):
+                        watched_img = R.drawable.watched;
+                        break;
+                }
+                image.setImageResource(watched_img);
+            }
         }
     }
 
