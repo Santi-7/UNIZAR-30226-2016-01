@@ -20,6 +20,8 @@ import com.w2w.whattowatch.data.DbAdapter;
 public class ListSeries extends ListAbstract {
 
     private ListView mList;       // View that holds all the series in the UI
+    private boolean orderByRanking = false; // When true, all series in the listView will be ordered
+    // by rating. When false, alphabetically.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class ListSeries extends ListAbstract {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_list_series, menu);
+        menu.findItem(R.id.order_by).setTitle(orderByRanking ? getString(R.string.order_alphabetical)
+                : getString(R.string.order_rating));
         return true;
     }
 
@@ -59,6 +63,11 @@ public class ListSeries extends ListAbstract {
         switch (item.getItemId()) {
             case R.id.create_new_series:
                 create();
+                return true;
+            case R.id.order_by:
+                orderByRanking = !orderByRanking;
+                list();
+                invalidateOptionsMenu();
                 return true;
             default:
                 break;
@@ -73,7 +82,7 @@ public class ListSeries extends ListAbstract {
      */
     protected void list() {
         // Get all of the series from the database and create the item list.
-        Cursor seriesCursor = mDbAdapter.fetchAllSeries();
+        Cursor seriesCursor = mDbAdapter.fetchAllSeries(orderByRanking);
         SeriesListViewAdapter notes =
                 new SeriesListViewAdapter(this, R.layout.series_row, seriesCursor, 0);
         mList.setAdapter(notes);
