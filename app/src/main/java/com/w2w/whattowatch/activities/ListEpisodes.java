@@ -103,7 +103,6 @@ public class ListEpisodes extends ListAbstract {
      */
     protected void list() {
         Cursor series = mDbAdapter.fetchSeries(seriesId);
-        startManagingCursor(series);
         seriesTitle = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_TITLE));
         getSupportActionBar().setTitle(seriesTitle);
 
@@ -225,24 +224,24 @@ public class ListEpisodes extends ListAbstract {
             if (tab == 0) {
                 View rootView = inflater.inflate(R.layout.fragment_description, container, false);
                 Cursor descriptionCursor = mDbAdapter.fetchSeries(series);
-                getActivity().startManagingCursor(descriptionCursor);
+                //getActivity().startManagingCursor(descriptionCursor);
                 String description = descriptionCursor.getString(
                         descriptionCursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION));
                 ((TextView) rootView.findViewById(R.id.description)).setText(description);
                 return rootView;
             } else {
                 seasons = getArguments().getIntegerArrayList(ARG_SEASONS_ARRAY);
+                assert seasons != null;
                 season = seasons.get(tab - 1);
                 View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
                 // Get seriesId and fetch episodes for the season.
                 Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
                         season);
-                getActivity().startManagingCursor(episodes);
+                //getActivity().startManagingCursor(episodes);
                 EpisodeListViewAdapter adapter = new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes, 0);
                 ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
                 episodeList.setAdapter(adapter);
                 registerForContextMenu(episodeList);
-                ImageView watched = (ImageView) episodeList.findViewById(R.id.episode_watched);
                 episodeList.setOnItemClickListener(
                         new AdapterView.OnItemClickListener() {
                             @Override
@@ -253,14 +252,17 @@ public class ListEpisodes extends ListAbstract {
                 return rootView;
             }
 
-            // TODO: Add an adapter similar to that in ListSeries
-
         }
 
         private void toggleWatched(long episodeId) {
             DbAdapter mDbAdapter = new DbAdapter(this.getActivity());
             mDbAdapter.open();
             mDbAdapter.toggleWatched(episodeId);
+            // Get seriesId and fetch episodes for the season.
+            Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
+                    season);
+            ListView episodeList = (ListView) this.getActivity().findViewById(R.id.episode_list);
+            ((EpisodeListViewAdapter) episodeList.getAdapter()).changeCursor(episodes);
         }
 
         /**
