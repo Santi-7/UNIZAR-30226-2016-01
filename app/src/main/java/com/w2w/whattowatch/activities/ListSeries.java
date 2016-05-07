@@ -74,7 +74,6 @@ public class ListSeries extends ListAbstract {
     protected void list() {
         // Get all of the series from the database and create the item list.
         Cursor seriesCursor = mDbAdapter.fetchAllSeries();
-        startManagingCursor(seriesCursor);
         SeriesListViewAdapter notes =
                 new SeriesListViewAdapter(this, R.layout.series_row, seriesCursor, 0);
         mList.setAdapter(notes);
