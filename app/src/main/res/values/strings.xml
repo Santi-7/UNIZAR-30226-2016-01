@@ -26,4 +26,6 @@
 
     <string name="space">"  "</string>
     <string name="EDot">Ep.</string>
+    <string name="order_alphabetical">Order alphabetically</string>
+    <string name="order_rating">Order by rating</string>
 </resources>
