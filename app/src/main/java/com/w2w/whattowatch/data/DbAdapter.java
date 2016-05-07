@@ -162,12 +162,14 @@ public class DbAdapter {
     }
 
     /**
-     * Retrieves all series from the database.
+     * Retrieves all series from the database ordered by title if orderByRating is false
+     * and by rating if it's true.
      * 
      * @return Cursor positioned at the head of all the series in the database.
      */
-    public Cursor fetchAllSeries() {
-        String query = "SELECT * FROM " + DATABASE_SERIES_TABLE + " ORDER BY " + SERIES_KEY_TITLE;
+    public Cursor fetchAllSeries(boolean orderByRating) {
+        String query = "SELECT * FROM " + DATABASE_SERIES_TABLE + " ORDER BY " +
+                (orderByRating ? SERIES_KEY_RATING + " DESC" : SERIES_KEY_TITLE + " COLLATE NOCASE");
         return sDb.rawQuery(query, null);
     }
 
