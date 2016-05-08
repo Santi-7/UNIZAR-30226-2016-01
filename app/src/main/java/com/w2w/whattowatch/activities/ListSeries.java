@@ -150,29 +150,29 @@ public class ListSeries extends ListAbstract {
             titleView.setText(series_title);
 
             ImageView image = (ImageView) view.findViewById(R.id.series_score);
-            String score = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_RATING));
-            score = score == null ? "0" : score;
-            int score_img = 0;
-            switch (score) {
+            String ranking = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_RATING));
+            ranking = ranking == null ? "0" : ranking;
+            int ranking_img = 0;
+            switch (ranking) {
                 case ("0"):
-                    score_img = R.drawable.none_v;
+                    ranking_img = R.drawable.none_v;
                     break;
                 case ("1"):
-                    score_img = R.drawable.none_v;
+                    ranking_img = R.drawable.none_v;
                     break;
                 case ("2"):
-                    score_img = R.drawable.two_v;
+                    ranking_img = R.drawable.two_v;
                     break;
                 case ("3"):
-                    score_img = R.drawable.three_v;
+                    ranking_img = R.drawable.three_v;
                     break;
                 case ("4"):
-                    score_img = R.drawable.four_v;
+                    ranking_img = R.drawable.four_v;
                     break;
                 case ("5"):
-                    score_img = R.drawable.five_v;
+                    ranking_img = R.drawable.five_v;
             }
-            image.setImageResource(score_img);
+            image.setImageResource(ranking_img);
             image.setScaleX(3.0f);
             image.setScaleY(3.0f);
         }
