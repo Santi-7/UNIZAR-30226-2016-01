@@ -155,24 +155,26 @@ public class ListSeries extends ListAbstract {
             int score_img = 0;
             switch (score) {
                 case ("0"):
-                    score_img = R.drawable.none;
+                    score_img = R.drawable.none_v;
                     break;
                 case ("1"):
-                    score_img = R.drawable.one;
+                    score_img = R.drawable.none_v;
                     break;
                 case ("2"):
-                    score_img = R.drawable.two;
+                    score_img = R.drawable.two_v;
                     break;
                 case ("3"):
-                    score_img = R.drawable.three;
+                    score_img = R.drawable.three_v;
                     break;
                 case ("4"):
-                    score_img = R.drawable.four;
+                    score_img = R.drawable.four_v;
                     break;
                 case ("5"):
-                    score_img = R.drawable.five;
+                    score_img = R.drawable.five_v;
             }
             image.setImageResource(score_img);
+            image.setScaleX(3.0f);
+            image.setScaleY(3.0f);
         }
     }
 }
