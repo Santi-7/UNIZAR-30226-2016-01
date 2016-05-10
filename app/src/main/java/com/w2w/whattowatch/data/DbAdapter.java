@@ -335,4 +335,8 @@ public class DbAdapter {
         }
     }
 
+    public SQLiteDatabase getsDb(){
+        return sDb;
+    }
+
 }
