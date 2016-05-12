@@ -319,6 +319,10 @@ public class ListEpisodes extends ListAbstract {
 
                 TextView nameView = (TextView) view.findViewById(R.id.episode_name);
                 String episode_name = cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_NAME));
+                if (episode_name.length() > 17) {
+                    int cut = episode_name.indexOf(" ", 5);
+                    episode_name = episode_name.substring(0, cut) + "\n" + episode_name.substring(cut + 1);
+                }
                 nameView.setText(episode_name);
 
                 ImageView image = (ImageView) view.findViewById(R.id.episode_watched);
