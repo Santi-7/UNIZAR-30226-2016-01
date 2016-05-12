@@ -43,7 +43,7 @@ public class DBAdapterTestSeries extends ActivityInstrumentationTestCase2<ListSe
     @After
     public void tearDown() throws Exception{
         if(rowId>0){
-            assertTrue(adapter.deleteSeries(rowId));
+            adapter.deleteSeries(rowId);
         }
         super.tearDown();
     }
@@ -250,7 +250,7 @@ public class DBAdapterTestSeries extends ActivityInstrumentationTestCase2<ListSe
 
     //Test ok con seriesID>0
     @Test
-    public void deleteSereiesTest1(){
+    public void deleteSeriesTest1(){
         rowId = adapter.createSeries("titulo", "descripcion", "5");
         assertTrue(adapter.deleteSeries(rowId));
         rowId = 0;
@@ -259,7 +259,7 @@ public class DBAdapterTestSeries extends ActivityInstrumentationTestCase2<ListSe
     //Test ok con valor límite en seriesID
     //CUIDADO: Este test borra todas las entradas de la tabla "series"
     @Test
-    public void deleteSereiesTest2(){
+    public void deleteSeriesTest2(){
         SQLiteDatabase db = adapter.getsDb();
         db.execSQL("delete from series");
         db.execSQL("delete from sqlite_sequence where name = 'series'");
@@ -271,39 +271,33 @@ public class DBAdapterTestSeries extends ActivityInstrumentationTestCase2<ListSe
 
     //Test no ok con seriesID<=0
     @Test
-    public void deleteSereiesTest3(){
+    public void deleteSeriesTest3(){
         assertFalse(adapter.deleteSeries(-1));
     }
 
     //Test no ok con valor límite en seriesID
     @Test
-    public void deleteSereiesTest4(){
+    public void deleteSeriesTest4(){
         assertFalse(adapter.deleteSeries(0));
     }
 
     //////////////////Pruebas de fetchSeries//////////////////////
 
     //Test ok con seriesID>0
-    //CUIDADO: Este test borra todas las entradas de la tabla "series"
     @Test
-    public void fetchSereiesTest1(){
-        SQLiteDatabase db = adapter.getsDb();
-        db.execSQL("delete from series");
-        db.execSQL("delete from sqlite_sequence where name = 'series'");
-        long aux = adapter.createSeries("titulo", "descripcion", "5");
-        rowId = adapter.createSeries("titulo2", "descripcion2", "5");
+    public void fetchSeriesTest1(){
+        rowId = adapter.createSeries("titulo", "descripcion", "5");
         Cursor c = adapter.fetchSeries(rowId);
         assertTrue(c.getCount()==1);
         c.moveToFirst();
         int idIndex = c.getColumnIndex("_id");
         assertEquals(rowId, c.getInt(idIndex));
-        assertTrue(adapter.deleteSeries(aux));
     }
 
     //Test ok con valor límite en seriesID
     //CUIDADO: Este test borra todas las entradas de la tabla "series"
     @Test
-    public void fetchSereiesTest2(){
+    public void fetchSeriesTest2(){
         SQLiteDatabase db = adapter.getsDb();
         db.execSQL("delete from series");
         db.execSQL("delete from sqlite_sequence where name = 'series'");
@@ -318,19 +312,19 @@ public class DBAdapterTestSeries extends ActivityInstrumentationTestCase2<ListSe
 
     //Test no ok con seriesID<=0
     @Test
-    public void fetchSereiesTest3(){
+    public void fetchSeriesTest3(){
         Cursor c = adapter.fetchSeries(-1);
         assertTrue(c.getCount()==0);
     }
 
     //Test no ok con valor límite en seriesID
     @Test
-    public void fetchSereiesTest4(){
+    public void fetchSeriesTest4(){
        Cursor c = adapter.fetchSeries(0);
         assertTrue(c.getCount()==0);
     }
 
-    //////////////////Pruebas de fetchSeries//////////////////////
+    //////////////////Pruebas de fetchAllSeries//////////////////////
 
     //Test ok con orderByRating==true
     @Test

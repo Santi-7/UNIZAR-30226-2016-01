@@ -151,7 +151,7 @@ public class DbAdapter {
      * @throws SQLException if series could not be found/retrieved
      */
     public Cursor fetchSeries(long seriesId) throws SQLException {
-        Cursor mCursor =
+       Cursor mCursor =
                 sDb.query(true, DATABASE_SERIES_TABLE, new String[]
                                 {SERIES_KEY_ID, SERIES_KEY_TITLE, SERIES_KEY_DESCRIPTION, SERIES_KEY_RATING},
                           SERIES_KEY_ID + "=" + seriesId, null, null, null, null, null);
