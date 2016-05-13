@@ -75,6 +75,12 @@ public class ListSeries extends ListAbstract {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        list();
+    }
+
     /////////////////////////////////////// ListAbstract ///////////////////////////////////////
 
     /**
@@ -158,7 +164,7 @@ public class ListSeries extends ListAbstract {
                     ranking_img = R.drawable.none_v;
                     break;
                 case ("1"):
-                    ranking_img = R.drawable.none_v;
+                    ranking_img = R.drawable.one_v;
                     break;
                 case ("2"):
                     ranking_img = R.drawable.two_v;
