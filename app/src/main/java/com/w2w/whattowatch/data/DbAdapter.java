@@ -99,7 +99,7 @@ public class DbAdapter {
      * @return id of the newly created series in the database or -1 to indicate error.
      */
     public long createSeries(String title, String description, String rating) {
-        if (title == null || title.equals("") || description == null) {
+        if (title == null || title.equals("") || description == null || !(rating==null || rating.equals("0") || rating.equals("1") ||rating.equals("2") ||rating.equals("3") ||rating.equals("4") || rating.equals("5") ) ) {
             return -1;
         }
         ContentValues initialValues = new ContentValues();
@@ -121,7 +121,7 @@ public class DbAdapter {
      * @return true if and only if the series title could be updated.
      */
     public boolean updateSeries(String title, String description, String rating, long seriesId) {
-        if (title == null || title.equals("") || description == null || seriesId <= 0) {
+        if (title == null || title.equals("") || description == null || seriesId <= 0 || !(rating==null || rating.equals("0") || rating.equals("1") ||rating.equals("2") ||rating.equals("3") ||rating.equals("4") || rating.equals("5") )) {
             return false;
         }
         ContentValues args = new ContentValues();
