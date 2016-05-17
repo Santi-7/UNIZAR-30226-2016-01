@@ -104,6 +104,14 @@ public class EditSeries extends EditAbstract {
             // Description of the series.
             descField.setText(series.getString(
                     series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION)));
+
+            String categoria = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_RATING));
+            if(categoria==null){
+                ratingSpinner.setSelection(0);
+            }
+            else{
+                ratingSpinner.setSelection(adapter.getPosition(categoria));
+            }
         }
     }
 }
