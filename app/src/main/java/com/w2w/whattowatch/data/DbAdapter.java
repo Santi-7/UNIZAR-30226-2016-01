@@ -148,7 +148,6 @@ public class DbAdapter {
      * 
      * @param seriesId id of the series to be retrieved.
      * @return Cursor positioned at the series with id [seriesId]
-     * @throws SQLException if series could not be found/retrieved
      */
     public Cursor fetchSeries(long seriesId) throws SQLException {
        Cursor mCursor =
@@ -228,7 +227,8 @@ public class DbAdapter {
     }
 
     /**
-     * Changes the state of the episode. From watched to unwatched and vice-versa.
+     * Changes the state of the episode, if it exists. From watched to unwatched and vice-versa.
+     * If it doesn't exist, it does nothing
      *
      * @param episodeId id of the episode which state will be toggled.
      */
@@ -271,10 +271,10 @@ public class DbAdapter {
     }
 
     /**
-     * Get the number of seasons of a series.
+     * Returns a cursor with the seasons of a series.
      * 
      * @param series series which number of seasons will be returned
-     * @return number of seasons of series
+     * @return Cursor with seasons
      */
     public Cursor getSeasons(long series) {
         String query = "SELECT DISTINCT " + EPISODE_KEY_SEASON_NUM + " FROM " +
