@@ -286,11 +286,16 @@ public class DbAdapter {
     /**
      * Returns a cursor to an especific season of a series.
      */
-    public Cursor fetchEpisodesFromSeason(long series, int season) {
+    public Cursor fetchEpisodesFromSeason(long series, int season, boolean filterWatched) {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
                 " WHERE " + EPISODE_KEY_SERIES + " = " + series + " AND " + EPISODE_KEY_SEASON_NUM +
-                " = " + season + " ORDER BY " + EPISODE_KEY_EPISODE_NUM;
+                " = " + season + (filterWatched ? " AND " + EPISODE_KEY_WATCHED + " = 0" : "") + " ORDER BY "
+                + EPISODE_KEY_EPISODE_NUM;
         return sDb.rawQuery(query, null);
+    }
+
+    public SQLiteDatabase getsDb() {
+        return sDb;
     }
 
     /**
@@ -309,7 +314,7 @@ public class DbAdapter {
 
         /**
          * Creates both the series table and the episode table in the database.
-         * 
+         *
          * @param db database where the tables will be created.
          */
         @Override
@@ -333,10 +338,6 @@ public class DbAdapter {
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_EPISODES_TABLE );
             onCreate(db);
         }
-    }
-
-    public SQLiteDatabase getsDb(){
-        return sDb;
     }
 
 }
