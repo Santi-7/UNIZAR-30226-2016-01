@@ -429,7 +429,7 @@ public class DBAdapterTestEpisodes extends ActivityInstrumentationTestCase2<List
     @Test
     public void fetchEpisodesFromSeasonTest1(){
         rowId = adapter.createEpisode("nombre", 5, 5, seriesID);
-        Cursor c = adapter.fetchEpisodesFromSeason(seriesID, 5, true);
+        Cursor c = adapter.fetchEpisodesFromSeason(seriesID, 5, false);
         assertTrue(c.getCount()>0);
     }
 
@@ -437,7 +437,7 @@ public class DBAdapterTestEpisodes extends ActivityInstrumentationTestCase2<List
     @Test
     public void fetchEpisodesFromSeasonTest2(){
         rowId = adapter.createEpisode("nombre", 5, 5, firstSeriesID);
-        Cursor c = adapter.fetchEpisodesFromSeason(firstSeriesID, 5, true);
+        Cursor c = adapter.fetchEpisodesFromSeason(firstSeriesID, 5, false);
         assertTrue(c.getCount()>0);
     }
 
@@ -445,19 +445,19 @@ public class DBAdapterTestEpisodes extends ActivityInstrumentationTestCase2<List
     @Test
     public void fetchEpisodesFromSeasonTest3(){
         rowId = adapter.createEpisode("nombre", 1, 5, seriesID);
-        Cursor c = adapter.fetchEpisodesFromSeason(seriesID, 1, true);
-        assertTrue(c.getCount()>0);
-    }
-
-    //Test ok con filterWatched=false
-    @Test
-    public void fetchEpisodesFromSeasonTest4(){
-        rowId = adapter.createEpisode("nombre", 1, 5, seriesID);
         Cursor c = adapter.fetchEpisodesFromSeason(seriesID, 1, false);
         assertTrue(c.getCount()>0);
     }
 
-
+    //Test ok con filterWatched=true
+    @Test
+    public void fetchEpisodesFromSeasonTest4(){
+        rowId = adapter.createEpisode("nombre", 1, 5, seriesID);
+        adapter.toggleWatched(rowId);
+        adapter.toggleWatched(rowId);
+        Cursor c = adapter.fetchEpisodesFromSeason(seriesID, 1, true);
+        assertTrue(c.getCount()>0);
+    }
 
     //Test no ok con season<=0
     @Test
