@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -32,6 +31,7 @@ public class ListEpisodes extends ListAbstract {
 
     private long seriesId;              // Identifier of current Series
     private String seriesTitle;         // Title of current Series
+    private boolean filterWatched = false;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -84,6 +84,10 @@ public class ListEpisodes extends ListAbstract {
             case R.id.edit_series:
                 editSeries();
                 return true;
+            case R.id.filter_watched:
+                this.filterWatched = !this.filterWatched;
+                this.list();
+                return true;
             default:
                 break;
         }
@@ -119,12 +123,10 @@ public class ListEpisodes extends ListAbstract {
                 seasons, seriesId);
         mSectionsPagerAdapter.notifyDataSetChanged();
 
-
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        mViewPager.setOffscreenPageLimit(0);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
@@ -170,6 +172,10 @@ public class ListEpisodes extends ListAbstract {
         Intent i = new Intent(this, EditSeries.class);
         i.putExtra(DbAdapter.SERIES_KEY_ID, seriesId);
         startActivityForResult(i, ACTIVITY_EDIT);
+    }
+
+    public boolean getFilterWatched() {
+        return filterWatched;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,7 +244,7 @@ public class ListEpisodes extends ListAbstract {
                 View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
                 // Get seriesId and fetch episodes for the season.
                 Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
-                        season);
+                        season, ((ListEpisodes) this.getActivity()).getFilterWatched());
                 //getActivity().startManagingCursor(episodes);
                 EpisodeListViewAdapter adapter = new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes, 0);
                 ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
@@ -262,9 +268,24 @@ public class ListEpisodes extends ListAbstract {
             mDbAdapter.toggleWatched(episodeId);
             // Get seriesId and fetch episodes for the season.
             Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
-                    season);
+                    season, ((ListEpisodes) this.getActivity()).getFilterWatched());
             ListView episodeList = (ListView) this.getActivity().findViewById(R.id.episode_list);
-            ((EpisodeListViewAdapter) episodeList.getAdapter()).changeCursor(episodes);
+            EpisodeListViewAdapter lva = new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes, 0);
+            episodeList.setAdapter(lva);
+            //ImageView watched_img = (ImageView) episodeList.getChildAt
+            //        (episodeList.getSelectedItemPosition()).findViewById(R.id.episode_watched);
+            //Drawable current = watched_img.getDrawable();
+            //if(current.equals(R.drawable.watched)){
+            //    watched_img.setImageResource(R.drawable.unwatched);
+            //} else{
+            //    watched_img.setImageResource(R.drawable.watched);
+            //}
+            //EpisodeListViewAdapter lva =  ((EpisodeListViewAdapter) episodeList.getAdapter());
+            // Sometimes this works sometimes it doesn't
+            //lva.notifyDataSetInvalidated();
+            //lva.changeCursor(episodes);
+            //lva.notifyDataSetChanged();
+            //episodeList.setAdapter(lva);*/
         }
 
         /**
@@ -352,7 +373,7 @@ public class ListEpisodes extends ListAbstract {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the seasons.
      */
-    protected class SeasonPagerAdapter extends FragmentStatePagerAdapter {
+    protected class SeasonPagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<Integer> seasons; // Holds all the seasons for the series
         private long seriesId;              // Id of the series

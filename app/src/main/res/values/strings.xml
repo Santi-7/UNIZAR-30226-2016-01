@@ -28,4 +28,5 @@
     <string name="EDot">Ep.</string>
     <string name="order_alphabetical">Order alphabetically</string>
     <string name="order_rating">Order by rating</string>
+    <string name="filter_watched">Filter watched</string>
 </resources>
