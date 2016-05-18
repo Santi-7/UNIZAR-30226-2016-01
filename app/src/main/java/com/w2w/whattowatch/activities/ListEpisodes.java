@@ -118,13 +118,15 @@ public class ListEpisodes extends ListAbstract {
         mSectionsPagerAdapter = new SeasonPagerAdapter(getSupportFragmentManager(),
                 seasons, seriesId);
         mSectionsPagerAdapter.notifyDataSetChanged();
+
+
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
     }
 
     /**
@@ -320,8 +322,12 @@ public class ListEpisodes extends ListAbstract {
                 TextView nameView = (TextView) view.findViewById(R.id.episode_name);
                 String episode_name = cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_NAME));
                 if (episode_name.length() > 17) {
-                    int cut = episode_name.indexOf(" ", 5);
-                    episode_name = episode_name.substring(0, cut) + "\n" + episode_name.substring(cut + 1);
+                    try{
+                        int cut = episode_name.indexOf(" ", 5);
+                        episode_name = episode_name.substring(0, cut) + "\n" + episode_name.substring(cut + 1);
+                    }catch(Exception e){
+                        episode_name = episode_name.substring(0,10)+"...";
+                    }
                 }
                 nameView.setText(episode_name);
 
