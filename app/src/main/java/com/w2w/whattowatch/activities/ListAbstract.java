@@ -99,6 +99,9 @@ public abstract class ListAbstract extends AppCompatActivity {
         list();
     }
 
+    /**
+     * Returns DBAdapter
+     */
     public DbAdapter getmDbAdapter(){
         return mDbAdapter;
     }

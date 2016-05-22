@@ -26,7 +26,7 @@ public class EditEpisodes extends EditAbstract {
         // Database adapter.
         dBAdapter = new DbAdapter(this);
         dBAdapter.open();
-        setContentView(R.layout.activity_edit_episodes);
+        setContentView( R.layout.activity_edit_episodes);
         setTitle(R.string.edit_episode);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,7 +91,8 @@ public class EditEpisodes extends EditAbstract {
     }
 
     /**
-     * Fills all user input fields with previously existing information from the database.
+     * Fills all user input fields with previously existing information from the database
+     * (if exists)
      */
     public void populateFields() {
         if (episodeId != null) {

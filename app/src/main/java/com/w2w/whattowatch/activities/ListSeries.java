@@ -103,7 +103,7 @@ public class ListSeries extends ListAbstract {
     }
 
     /**
-     * Starts an activity to edit a series.
+     * Starts an activity to edit an existing series.
      *
      * @param elementId id of the series that will be edited.
      */
@@ -155,6 +155,7 @@ public class ListSeries extends ListAbstract {
             String series_title = cursor.getString(cursor.getColumnIndex(DbAdapter.SERIES_KEY_TITLE));
             titleView.setText(series_title);
 
+            //Sets the image that displays the user's rating of the series.
             ImageView image = (ImageView) view.findViewById(R.id.series_score);
             String ranking = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_RATING));
             ranking = ranking == null ? "0" : ranking;

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Database adapter. Contains methods for adding, modifying and removing series and episodes from
+ * Database adapter. Contains methods for adding, modifying,editing and removing series and episodes from
  * the database.
  */
 public class DbAdapter {
@@ -96,10 +96,14 @@ public class DbAdapter {
      *              title != null and title.length() > 0
      * @param description of the series to be created.
      *              description != null
+     * @param rating of the series to be created
+     *               rating != null and 0>=rating>=5
      * @return id of the newly created series in the database or -1 to indicate error.
      */
     public long createSeries(String title, String description, String rating) {
-        if (title == null || title.equals("") || description == null || !(rating==null || rating.equals("0") || rating.equals("1") ||rating.equals("2") ||rating.equals("3") ||rating.equals("4") || rating.equals("5") ) ) {
+        if (title == null || title.equals("") || description == null || !(rating==null
+                || rating.equals("0") || rating.equals("1") ||rating.equals("2")
+                ||rating.equals("3") ||rating.equals("4") || rating.equals("5") ) ) {
             return -1;
         }
         ContentValues initialValues = new ContentValues();
@@ -110,7 +114,7 @@ public class DbAdapter {
     }
 
     /**
-     * Updates the title and description of an existing series.
+     * Updates the title,description and rating of an existing series.
      * 
      * @param title new title for the series.
      *              title != null and title.length() > 0
@@ -118,10 +122,14 @@ public class DbAdapter {
      *              description != null
      * @param seriesId of the series that will be updated.
      *              seriesId > 0
+     * @param rating of the series to be created
+     *               rating != null and 0>=rating>=5
      * @return true if and only if the series title could be updated.
      */
     public boolean updateSeries(String title, String description, String rating, long seriesId) {
-        if (title == null || title.equals("") || description == null || seriesId <= 0 || !(rating==null || rating.equals("0") || rating.equals("1") ||rating.equals("2") ||rating.equals("3") ||rating.equals("4") || rating.equals("5") )) {
+        if (title == null || title.equals("") || description == null || seriesId <= 0
+                || !(rating==null || rating.equals("0") || rating.equals("1") ||rating.equals("2")
+                ||rating.equals("3") ||rating.equals("4") || rating.equals("5") )) {
             return false;
         }
         ContentValues args = new ContentValues();
@@ -284,13 +292,14 @@ public class DbAdapter {
     }
 
     /**
-     * Returns a cursor to an especific season of a series.
+     * Returns a cursor to an specific season of a series.
+     * @return Cursor with season
      */
     public Cursor fetchEpisodesFromSeason(long series, int season, boolean filterWatched) {
         String query = "SELECT * FROM " + DATABASE_EPISODES_TABLE +
-                " WHERE " + EPISODE_KEY_SERIES + " = " + series + " AND " + EPISODE_KEY_SEASON_NUM +
-                " = " + season + (filterWatched ? " AND " + EPISODE_KEY_WATCHED + " = 0" : "") + " ORDER BY "
-                + EPISODE_KEY_EPISODE_NUM;
+                " WHERE " + EPISODE_KEY_SERIES + " = " + series + " AND " + EPISODE_KEY_SEASON_NUM
+                + " = " + season + (filterWatched ? " AND " + EPISODE_KEY_WATCHED + " = 0" : "")
+                + " ORDER BY " + EPISODE_KEY_EPISODE_NUM;
         return sDb.rawQuery(query, null);
     }
 

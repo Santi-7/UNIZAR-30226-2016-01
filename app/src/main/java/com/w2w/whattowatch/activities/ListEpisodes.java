@@ -103,7 +103,7 @@ public class ListEpisodes extends ListAbstract {
     /////////////////////////////////////// ListAbstract ///////////////////////////////////////
 
     /**
-     * Fetches and shows all episodes from the database.
+     * Fetches and shows all episodes of a series from the database.
      */
     protected void list() {
         Cursor series = mDbAdapter.fetchSeries(seriesId);
@@ -243,10 +243,12 @@ public class ListEpisodes extends ListAbstract {
                 season = seasons.get(tab - 1);
                 View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
                 // Get seriesId and fetch episodes for the season.
-                Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
-                        season, ((ListEpisodes) this.getActivity()).getFilterWatched());
+                Cursor episodes =
+                        mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
+                                    season, ((ListEpisodes) this.getActivity()).getFilterWatched());
                 //getActivity().startManagingCursor(episodes);
-                EpisodeListViewAdapter adapter = new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes, 0);
+                EpisodeListViewAdapter adapter = new EpisodeListViewAdapter(this.getContext(),
+                                                                R.layout.episode_row, episodes, 0);
                 ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
                 episodeList.setAdapter(adapter);
                 registerForContextMenu(episodeList);
@@ -261,16 +263,21 @@ public class ListEpisodes extends ListAbstract {
             }
 
         }
+        /**
+         * Method called when an user clicks on the "watched" icon for an specific episode.
+         */
 
         private void toggleWatched(long episodeId) {
             DbAdapter mDbAdapter = new DbAdapter(this.getActivity());
             mDbAdapter.open();
             mDbAdapter.toggleWatched(episodeId);
             // Get seriesId and fetch episodes for the season.
-            Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
-                    season, ((ListEpisodes) this.getActivity()).getFilterWatched());
+            Cursor episodes =
+                    mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
+                                    season, ((ListEpisodes) this.getActivity()).getFilterWatched());
             ListView episodeList = (ListView) this.getActivity().findViewById(R.id.episode_list);
-            EpisodeListViewAdapter lva = new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes, 0);
+            EpisodeListViewAdapter lva =
+                    new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes,0);
             episodeList.setAdapter(lva);
             //ImageView watched_img = (ImageView) episodeList.getChildAt
             //        (episodeList.getSelectedItemPosition()).findViewById(R.id.episode_watched);
@@ -337,15 +344,20 @@ public class ListEpisodes extends ListAbstract {
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
                 TextView numberView = (TextView) view.findViewById(R.id.episode_number);
-                String episode_number = cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_EPISODE_NUM));
+                String episode_number =
+                        cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_EPISODE_NUM));
                 numberView.setText(episode_number);
 
                 TextView nameView = (TextView) view.findViewById(R.id.episode_name);
-                String episode_name = cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_NAME));
+                String episode_name =
+                        cursor.getString(cursor.getColumnIndex(DbAdapter.EPISODE_KEY_NAME));
+
+                //If the episode's name is too long, shorten it
                 if (episode_name.length() > 17) {
                     try{
                         int cut = episode_name.indexOf(" ", 5);
-                        episode_name = episode_name.substring(0, cut) + "\n" + episode_name.substring(cut + 1);
+                        episode_name = episode_name.substring(0, cut) + "\n"
+                                        + episode_name.substring(cut + 1);
                     }catch(Exception e){
                         episode_name = episode_name.substring(0,10)+"...";
                     }
@@ -353,9 +365,12 @@ public class ListEpisodes extends ListAbstract {
                 nameView.setText(episode_name);
 
                 ImageView image = (ImageView) view.findViewById(R.id.episode_watched);
-                String wasWatched = cursor.getString(cursor.getColumnIndexOrThrow(DbAdapter.EPISODE_KEY_WATCHED));
+                String wasWatched = cursor.getString(cursor.getColumnIndexOrThrow(
+                                                        DbAdapter.EPISODE_KEY_WATCHED));
                 wasWatched = wasWatched == null ? "0" : wasWatched;
                 int watched_img = 0;
+
+                //Set watched/unwatched icon
                 switch (wasWatched) {
                     case ("0"):
                         watched_img = R.drawable.unwatched;
@@ -384,10 +399,13 @@ public class ListEpisodes extends ListAbstract {
             this.seriesId = seriesId;
         }
 
+        /**
+         * getItem is called to instantiate the fragment for the given page.
+         * @param seasonNum
+         * @return PlaceholderFragment (defined as a static inner class below).
+         */
         @Override
         public Fragment getItem(int seasonNum) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             return SeasonFragment.newInstance(seasons, seasonNum, seriesId);
         }
 

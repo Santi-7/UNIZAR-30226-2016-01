@@ -96,6 +96,7 @@ public class EditSeries extends EditAbstract {
         // Apply the adapter to the spinner
         ratingSpinner.setAdapter(adapter);
         if (seriesId != null) {
+            String categoria;
             Cursor series = dBAdapter.fetchSeries(seriesId);
             startManagingCursor(series);
             // Title of the series.
@@ -105,8 +106,8 @@ public class EditSeries extends EditAbstract {
             descField.setText(series.getString(
                     series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION)));
 
-            String categoria = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_RATING));
-            if(categoria==null){
+            categoria = series.getString(series.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_RATING));
+            if (categoria==null){
                 ratingSpinner.setSelection(0);
             }
             else{
