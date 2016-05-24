@@ -191,11 +191,12 @@ public class ListEpisodes extends ListAbstract {
          */
         private static final String ARG_TAB_NUMBER = "section_number";
         private static final String ARG_SERIES_ID = "series_id";
-        private static final String ARG_SEASONS_ARRAY = "seasons_array";
-
-        private ArrayList<Integer> seasons;
+        private static final String ARG_SEASON_NUMBER = "season_num";
         private int season = -1;
         private int tab = -1;
+        private long seriesId = -1;
+
+        private ListView episodeList;
 
         public SeasonFragment() {
         }
@@ -207,7 +208,7 @@ public class ListEpisodes extends ListAbstract {
                                                     long seriesId) {
             SeasonFragment fragment = new SeasonFragment();
             Bundle args = new Bundle();
-            args.putIntegerArrayList(ARG_SEASONS_ARRAY, seasons);
+            args.putInt(ARG_SEASON_NUMBER, (tabNumber == 0 ? 0 : seasons.get(tabNumber - 1)));
             args.putInt(ARG_TAB_NUMBER, tabNumber);
             args.putLong(ARG_SERIES_ID, seriesId);
             fragment.setArguments(args);
@@ -232,67 +233,49 @@ public class ListEpisodes extends ListAbstract {
             if (tab == 0) {
                 View rootView = inflater.inflate(R.layout.fragment_description, container, false);
                 Cursor descriptionCursor = mDbAdapter.fetchSeries(series);
-                //getActivity().startManagingCursor(descriptionCursor);
                 String description = descriptionCursor.getString(
                         descriptionCursor.getColumnIndexOrThrow(DbAdapter.SERIES_KEY_DESCRIPTION));
                 ((TextView) rootView.findViewById(R.id.description)).setText(description);
                 return rootView;
             } else {
-                seasons = getArguments().getIntegerArrayList(ARG_SEASONS_ARRAY);
-                assert seasons != null;
-                season = seasons.get(tab - 1);
+                season = getArguments().getInt(ARG_SEASON_NUMBER);
                 View rootView = inflater.inflate(R.layout.fragment_list_episodes, container, false);
                 // Get seriesId and fetch episodes for the season.
-                Cursor episodes =
-                        mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
-                                    season, ((ListEpisodes) this.getActivity()).getFilterWatched());
-                //getActivity().startManagingCursor(episodes);
-                EpisodeListViewAdapter adapter = new EpisodeListViewAdapter(this.getContext(),
-                                                                R.layout.episode_row, episodes, 0);
-                ListView episodeList = (ListView) rootView.findViewById(R.id.episode_list);
+                seriesId = getArguments().getLong(ARG_SERIES_ID);
+                Cursor episodes = mDbAdapter.fetchEpisodesFromSeason(seriesId,
+                        season, ((ListEpisodes) this.getActivity()).getFilterWatched());
+
+                EpisodeListViewAdapter adapter = new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes, 0);
+                episodeList = (ListView) rootView.findViewById(R.id.episode_list);
                 episodeList.setAdapter(adapter);
                 registerForContextMenu(episodeList);
                 episodeList.setOnItemClickListener(
                         new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                toggleWatched(id);
+                                toggleWatched(id, view);
                             }
                         });
                 return rootView;
             }
 
         }
-        /**
-         * Method called when an user clicks on the "watched" icon for an specific episode.
-         */
 
-        private void toggleWatched(long episodeId) {
+        /**
+         * Change an episodes state from watched to unwatched.
+         *
+         * @param episodeId id of the episode that will be changed
+         * @param row       View containing the eye icon that will be immediately updated as feedback for
+         *                  the user
+         */
+        private void toggleWatched(long episodeId, View row) {
             DbAdapter mDbAdapter = new DbAdapter(this.getActivity());
             mDbAdapter.open();
             mDbAdapter.toggleWatched(episodeId);
-            // Get seriesId and fetch episodes for the season.
-            Cursor episodes =
-                    mDbAdapter.fetchEpisodesFromSeason(getArguments().getLong(ARG_SERIES_ID),
-                                    season, ((ListEpisodes) this.getActivity()).getFilterWatched());
-            ListView episodeList = (ListView) this.getActivity().findViewById(R.id.episode_list);
-            EpisodeListViewAdapter lva =
-                    new EpisodeListViewAdapter(this.getContext(), R.layout.episode_row, episodes,0);
-            episodeList.setAdapter(lva);
-            //ImageView watched_img = (ImageView) episodeList.getChildAt
-            //        (episodeList.getSelectedItemPosition()).findViewById(R.id.episode_watched);
-            //Drawable current = watched_img.getDrawable();
-            //if(current.equals(R.drawable.watched)){
-            //    watched_img.setImageResource(R.drawable.unwatched);
-            //} else{
-            //    watched_img.setImageResource(R.drawable.watched);
-            //}
-            //EpisodeListViewAdapter lva =  ((EpisodeListViewAdapter) episodeList.getAdapter());
-            // Sometimes this works sometimes it doesn't
-            //lva.notifyDataSetInvalidated();
-            //lva.changeCursor(episodes);
-            //lva.notifyDataSetChanged();
-            //episodeList.setAdapter(lva);*/
+            // Update only the eye icon in the view.
+            EpisodeListViewAdapter elva = (EpisodeListViewAdapter) episodeList.getAdapter();
+            elva.changeCursor(mDbAdapter.fetchEpisodesFromSeason(seriesId, season, ((ListEpisodes) this.getActivity()).getFilterWatched()));
+            elva.notifyDataSetChanged();
         }
 
         /**

@@ -36,21 +36,21 @@ public class DbAdapter {
     /* SQL statement for creating the series table*/
     private static final String CREATE_SERIES_TABLE =
             "create table " + DATABASE_SERIES_TABLE +
-            " (" + SERIES_KEY_ID + " integer primary key autoincrement, " +
-                   SERIES_KEY_TITLE + " text not null, " +
+                    " (" + SERIES_KEY_ID + " integer primary key autoincrement, " +
+                    SERIES_KEY_TITLE + " text not null, " +
                     SERIES_KEY_RATING + " integer, " +
-                   SERIES_KEY_DESCRIPTION + " text not null);";
+                    SERIES_KEY_DESCRIPTION + " text not null);";
 
     /* SQL statement for creating the episode table*/
     private static final String CREATE_EPISODE_TABLE =
             "create table " + DATABASE_EPISODES_TABLE +
-            " (" + EPISODE_KEY_ID + " integer primary key autoincrement, " +
-                   EPISODE_KEY_NAME + " text not null, " +
-                   EPISODE_KEY_SEASON_NUM + " integer, " +
-                   EPISODE_KEY_EPISODE_NUM + " integer, " +
-                   EPISODE_KEY_WATCHED + " boolean, " +
-                   EPISODE_KEY_SERIES + " integer references " +
-                   DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
+                    " (" + EPISODE_KEY_ID + " integer primary key autoincrement, " +
+                    EPISODE_KEY_NAME + " text not null, " +
+                    EPISODE_KEY_SEASON_NUM + " integer, " +
+                    EPISODE_KEY_EPISODE_NUM + " integer, " +
+                    EPISODE_KEY_WATCHED + " boolean, " +
+                    EPISODE_KEY_SERIES + " integer references " +
+                    DATABASE_SERIES_TABLE + "(" + SERIES_KEY_ID + ") on delete cascade);";
 
     /* Adapter private variables */
     private Context ctx;
@@ -91,7 +91,7 @@ public class DbAdapter {
 
     /**
      * Creates a new series in the database.
-     * 
+     *
      * @param title of the series to be created.
      *              title != null and title.length() > 0
      * @param description of the series to be created.
@@ -115,7 +115,7 @@ public class DbAdapter {
 
     /**
      * Updates the title,description and rating of an existing series.
-     * 
+     *
      * @param title new title for the series.
      *              title != null and title.length() > 0
      * @param description of the series to be created.
@@ -141,7 +141,7 @@ public class DbAdapter {
 
     /**
      * Deletes the series [seriesId] from the database.
-     * 
+     *
      * @param seriesId id of the series that will be deleted.
      *                 seriesId > 0
      * @return true if and only if the series could be deleted.
@@ -153,15 +153,15 @@ public class DbAdapter {
 
     /**
      * Retrieves the series [seriesId] from the database.
-     * 
+     *
      * @param seriesId id of the series to be retrieved.
      * @return Cursor positioned at the series with id [seriesId]
      */
     public Cursor fetchSeries(long seriesId) throws SQLException {
-       Cursor mCursor =
+        Cursor mCursor =
                 sDb.query(true, DATABASE_SERIES_TABLE, new String[]
                                 {SERIES_KEY_ID, SERIES_KEY_TITLE, SERIES_KEY_DESCRIPTION, SERIES_KEY_RATING},
-                          SERIES_KEY_ID + "=" + seriesId, null, null, null, null, null);
+                        SERIES_KEY_ID + "=" + seriesId, null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -171,7 +171,7 @@ public class DbAdapter {
     /**
      * Retrieves all series from the database ordered by title if orderByRating is false
      * and by rating if it's true.
-     * 
+     *
      * @return Cursor positioned at the head of all the series in the database.
      */
     public Cursor fetchAllSeries(boolean orderByRating) {
@@ -186,7 +186,7 @@ public class DbAdapter {
 
     /**
      * Creates a new episodes in the database.
-     * 
+     *
      * @param name of the new episode.
      *             name != null
      * @param season of the new episode.
@@ -206,12 +206,13 @@ public class DbAdapter {
         initialValues.put(EPISODE_KEY_SEASON_NUM, season);
         initialValues.put(EPISODE_KEY_EPISODE_NUM, number);
         initialValues.put(EPISODE_KEY_SERIES, series);
+        initialValues.put(EPISODE_KEY_WATCHED, false);
         return sDb.insert(DATABASE_EPISODES_TABLE, null, initialValues);
     }
 
     /**
      * Updates the information of an episode [episodeId]
-     * 
+     *
      * @param name of the updated episode.
      *             name != null
      * @param season of the updated episode.
@@ -250,7 +251,7 @@ public class DbAdapter {
 
     /**
      * Deletes the episode [episodeId] from the database.
-     * 
+     *
      * @param episodeId id of the episode that will be deleted.
      *                  episodeId > 0
      * @return true if and only if the episode could be deleted from the database.
@@ -262,7 +263,7 @@ public class DbAdapter {
 
     /**
      * Retrieves the episode [episodeId] from the database.
-     * 
+     *
      * @param episodeId id of the episode to be retrieved.
      * @return Cursor positioned at the episode with id [episodeId]
      */
@@ -271,7 +272,7 @@ public class DbAdapter {
                 sDb.query(true, DATABASE_EPISODES_TABLE, new String[]
                                 {EPISODE_KEY_ID, EPISODE_KEY_NAME, EPISODE_KEY_SEASON_NUM,
                                         EPISODE_KEY_EPISODE_NUM, EPISODE_KEY_SERIES},
-                          EPISODE_KEY_ID + "=" + episodeId, null, null, null, null, null);
+                        EPISODE_KEY_ID + "=" + episodeId, null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -280,7 +281,7 @@ public class DbAdapter {
 
     /**
      * Returns a cursor with the seasons of a series.
-     * 
+     *
      * @param series series which number of seasons will be returned
      * @return Cursor with seasons
      */
