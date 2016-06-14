@@ -8,6 +8,10 @@ This proyect responds to the ***Group 01*** of the subject
 
 ***
 
+★★★★★ Awarded as the **best project** in the 15/16 Software Project subject of the University of Zaragoza. ★★★★★
+
+***
+
 ###### [Apache 2.0 license](https://github.com/Santi-7/UNIZAR-30226-2016-01/blob/master/LICENSE). If you use this code or parts of it, please name us.
 
 ***
